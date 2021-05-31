@@ -1,31 +1,37 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <wchar.h>
+#include <locale.h>
+#include <time.h>
 
-#define SIZE 20
-
-/*   
+#define BILLION 1000000000L;
+  
 int main(void)
 {
-    FILE * fp;
-    char * line = NULL;
-    size_t len = 0;
-    size_t read;
+    struct timespec start, stop;
+    double accum;
 
-    fp = fopen("dictionaries/portuguese-small.txt", "r");
+    wchar_t *word = L"á";
+    setlocale(LC_ALL, "");
 
-    if (fp == NULL)
-        exit(EXIT_FAILURE);
+    clock_gettime(CLOCK_REALTIME, &start);
 
-    while ((read = getline(&line, &len, fp)) != -1) {
-        printf("Retrieved line of length %zu:\n", read);
-        printf("%s", line);
+    /*FILE *f = fopen("dictionaries/portuguese.txt", "rb");
+    fseek(f, 0, SEEK_END);
+    long fsize = ftell(f);
+    fseek(f, 0, SEEK_SET);  
 
-        //Line To Numbers converter
+    char *string = malloc(fsize + 1);
+    fread(string, 1, fsize, f);
+    string[fsize] = '\0';*/
 
-    }
+    
+    clock_gettime(CLOCK_REALTIME, &stop);
+    
+    accum = (stop.tv_sec - start.tv_sec) + (stop.tv_nsec - start.tv_nsec) / (double)BILLION;
+    printf("\n%f\n", accum);
 
-    //fclose(fp);
-
+    //fclose(f);
     return 0;
-
-}*/
+}
