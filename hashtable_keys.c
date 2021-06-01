@@ -11,7 +11,7 @@ typedef Position List;
 
 
 struct ListNode{
-    char *Element;
+    wchar_t Element;
     Position Next;
 };
 
@@ -39,7 +39,7 @@ static int NextPrime( int N ){
 
 
 /* Hash function for ints */
-Index HashKeys( ElementType Key, int TableSize ){
+Index HashKeys( wchar_t Key, int TableSize ){
     return Key % TableSize;
 }
 
@@ -81,10 +81,10 @@ HashTable InitializeKeysTable( int TableSize ){
 
 
 /* Find a Key in HashTable */
-/*
-Position Find( ElementType Key, HashTable H )
+
+Position FindKey( wchar_t Key, HashTable H )
 {
-    List L = H->TheLists[Hash( Key, H->TableSize )];
+    List L = H->TheLists[HashKeys( Key, H->TableSize )];
     Position P = L->Next;
 
     while( P != NULL && P->Element != Key )
@@ -93,16 +93,15 @@ Position Find( ElementType Key, HashTable H )
     
     return P;
 }
-*/
 
 
 /* Find the key in the given index */
-Position FindNthKey(char *Key, int Index, HashTable H )
+Position FindNthKey(wchar_t Key, int Index, HashTable H )
 {
     List L = H->TheLists[Index];
     Position P = L->Next;
 
-    while( P != NULL && strcmp(P->Element, Key)!= 0)
+    while( P != NULL && P->Element != Key)
         /* Probably need strcmp!! */
         P = P->Next;
     
@@ -111,7 +110,7 @@ Position FindNthKey(char *Key, int Index, HashTable H )
 
 
 /* Insert the Element Key passed as argument in HashTable H */
-void InsertNthKey(char *Key, int Index, HashTable H ){
+void InsertNthKey(wchar_t Key, int Index, HashTable H ){
     Position Pos, NewCell;
     List L;
 
@@ -127,8 +126,9 @@ void InsertNthKey(char *Key, int Index, HashTable H ){
         else{
             L = H->TheLists[Index];
             NewCell->Next = L->Next;
-            NewCell->Element = malloc(sizeof(Key));
-            strcpy(NewCell->Element, Key);
+            //NewCell->Element = malloc(sizeof(Key));
+            //strcpy(NewCell->Element, Key);
+            NewCell->Element = Key;
             L->Next = NewCell;
         }
     }
@@ -140,8 +140,9 @@ void InsertNthKey(char *Key, int Index, HashTable H ){
         //to insert the element inside the list of the current hashtable position
         NewCell = malloc( sizeof( struct ListNode ) );
         Pos->Next = NewCell;
-        NewCell->Element = malloc(sizeof(Key));
-        strcpy(NewCell->Element,Key);
+        //NewCell->Element = malloc(sizeof(Key));
+        //strcpy(NewCell->Element,Key);
+        NewCell->Element = Key;
         NewCell->Next = NULL;
     }
 }
@@ -184,7 +185,7 @@ void Insert( ElementType Key, HashTable H ){
 */
 
 /* Print the Element in Node P */
-const char* RetrieveKey( Position P ){
+wchar_t RetrieveKey( Position P ){
     return P->Element;
 }
 
@@ -287,7 +288,7 @@ void PrintHashKeysTable(HashTable T)
             printf("%d\t[", i);
             while(P != NULL)
             {
-                printf("%s", P->Element);
+                printf("%lc", P->Element);
                 P = P->Next;
 
                 //If is not the last element
@@ -305,49 +306,49 @@ void PrintHashKeysTable(HashTable T)
 void InsertT9Keys(HashTable T)
 {
     //Key 2
-    InsertNthKey("a", 2, T);
-    InsertNthKey("b", 2, T);
-    InsertNthKey("c", 2, T);
-    InsertNthKey("á", 2, T);
-    InsertNthKey("à", 2, T);
-    InsertNthKey("â", 2, T);
-    InsertNthKey("ã", 2, T);
-    InsertNthKey("ç", 2, T);
-    //Key 3KeyInsertNthKey
-    InsertNthKey("d", 3, T);
-    InsertNthKey("e", 3, T);
-    InsertNthKey("f", 3, T);
-    InsertNthKey("é", 3, T);
-    InsertNthKey("ê", 3, T);
-    //Key 4KeyInsertNthKey
-    InsertNthKey("g", 4, T);
-    InsertNthKey("h", 4, T);
-    InsertNthKey("i", 4, T);
-    InsertNthKey("í", 4, T);
-    //Key 5KeyInsertNthKey
-    InsertNthKey("j", 5, T);
-    InsertNthKey("k", 5, T);
-    InsertNthKey("l", 5, T);
-    //Key 6KeyInsertNthKey
-    InsertNthKey("m", 6, T);
-    InsertNthKey("n", 6, T);
-    InsertNthKey("o", 6, T);
-    InsertNthKey("ó", 6, T);
-    InsertNthKey("ô", 6, T);
-    InsertNthKey("õ", 6, T);
-    //Key 7KeyInsertNthKey
-    InsertNthKey("p", 7, T);
-    InsertNthKey("q", 7, T);
-    InsertNthKey("r", 7, T);
-    InsertNthKey("s", 7, T);
-    //Key 8KeyInsertNthKey
-    InsertNthKey("t", 8, T);
-    InsertNthKey("u", 8, T);
-    InsertNthKey("v", 8, T);
-    InsertNthKey("ú", 8, T);
-    //Key 9KeyInsertNthKey
-    InsertNthKey("w", 9, T);
-    InsertNthKey("x", 9, T);
-    InsertNthKey("y", 9, T);
-    InsertNthKey("z", 9, T);
+    InsertNthKey(L'a', 2, T);
+    InsertNthKey(L'b', 2, T);
+    InsertNthKey(L'c', 2, T);
+    InsertNthKey(L'á', 2, T);
+    InsertNthKey(L'à', 2, T);
+    InsertNthKey(L'â', 2, T);
+    InsertNthKey(L'ã', 2, T);
+    InsertNthKey(L'ç', 2, T);
+    //Key 3
+    InsertNthKey(L'd', 3, T);
+    InsertNthKey(L'e', 3, T);
+    InsertNthKey(L'f', 3, T);
+    InsertNthKey(L'é', 3, T);
+    InsertNthKey(L'ê', 3, T);
+    //Key 4
+    InsertNthKey(L'g', 4, T);
+    InsertNthKey(L'h', 4, T);
+    InsertNthKey(L'i', 4, T);
+    InsertNthKey(L'í', 4, T);
+    //Key 5
+    InsertNthKey(L'j', 5, T);
+    InsertNthKey(L'k', 5, T);
+    InsertNthKey(L'l', 5, T);
+    //Key 6
+    InsertNthKey(L'm', 6, T);
+    InsertNthKey(L'n', 6, T);
+    InsertNthKey(L'o', 6, T);
+    InsertNthKey(L'ó', 6, T);
+    InsertNthKey(L'ô', 6, T);
+    InsertNthKey(L'õ', 6, T);
+    //Key 7
+    InsertNthKey(L'p', 7, T);
+    InsertNthKey(L'q', 7, T);
+    InsertNthKey(L'r', 7, T);
+    InsertNthKey(L's', 7, T);
+    //Key 8
+    InsertNthKey(L't', 8, T);
+    InsertNthKey(L'u', 8, T);
+    InsertNthKey(L'v', 8, T);
+    InsertNthKey(L'ú', 8, T);
+    //Key 9
+    InsertNthKey(L'w', 9, T);
+    InsertNthKey(L'x', 9, T);
+    InsertNthKey(L'y', 9, T);
+    InsertNthKey(L'z', 9, T);
 }
