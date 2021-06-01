@@ -4,8 +4,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <wchar.h>
-#include <locale.h>
 
 #define MAX_LINE_SIZE 233
 
@@ -43,15 +41,13 @@ static int NextPrime( int N ){
 
 
 /* Hash function for ints */
-Index Hash( const char *Key, int TableSize )
+Index HashWords( const char *Key, int TableSize )
 {
-    printf("INSIDE HASH() FUNCTION\n");
     unsigned int HashVal = 0;
 
     while( *Key != '\0' )
         HashVal += *Key++;
-
-    printf("[INFO]: Value Returned from Hash() -> %d\n", HashVal%TableSize);
+   
     return HashVal % TableSize;
 }
 
@@ -60,7 +56,7 @@ Index Hash( const char *Key, int TableSize )
 /* Initialize the Table, 
 making the correspondent malloc() and allocate the array of lists and them Headers 
 to use on HashTable positions */
-HashTable InitializeTable( int TableSize ){
+HashTable InitializeWordsTable( int TableSize ){
     HashTable H;
     int i;
 
@@ -95,10 +91,9 @@ HashTable InitializeTable( int TableSize ){
 
 
 /* Find a Key in HashTable */
-Position Find(const char *Key, HashTable H )
+Position FindWord(const char *Key, HashTable H )
 {
-    List L = H->TheLists[Hash( Key, H->TableSize )];
-    printf("HASH RESULT IN FIND FUNCT() -> %d\n", Hash( Key, H->TableSize ));
+    List L = H->TheLists[HashWords( Key, H->TableSize )];
     Position P = L->Next;
 
     while( P != NULL && strcmp(P->Element, Key)!=0 )
@@ -111,21 +106,14 @@ Position Find(const char *Key, HashTable H )
 
 
 /* Insert the Element Key passed as argument in HashTable H */
-void Insert(const char* Key, HashTable H ){
-    printf("START INSERT FUNCTION\n");
-    printf("%s", Key);
+void InsertWord(const char* Key, HashTable H ){
     Position Pos, NewCell;
     List L;
 
-    printf("BEFORE FIND() IN INSERT\n");
-
-    Pos = Find( Key, H );
-
-    printf("AFTER FIND() IN INSERT\n");
+    Pos = FindWord( Key, H );
 
     //Key is not found
     if( Pos == NULL ){  
-        printf("IF\n");
         NewCell = malloc( sizeof( struct ListNode ) );
         NewCell->Element = malloc(sizeof(Key));
 
@@ -133,7 +121,7 @@ void Insert(const char* Key, HashTable H ){
             FatalError( "Out of space!!!" );
         
         else{
-            L = H->TheLists[ Hash( Key, H->TableSize ) ];
+            L = H->TheLists[ HashWords( Key, H->TableSize ) ];
             NewCell->Next = L->Next;
             //NewCell->Element = Key; 
             strcpy(NewCell->Element, Key);
@@ -144,7 +132,6 @@ void Insert(const char* Key, HashTable H ){
     //Key is found in HashTable
     else
     {   
-        printf("ELSE\n");
         //If the key is found in HT, we need to create another node 
         //to insert the element inside the list of the current hashtable position
         NewCell = malloc( sizeof( struct ListNode ) );
@@ -157,13 +144,13 @@ void Insert(const char* Key, HashTable H ){
 }
 
 /* Print the Element in Node P */
-const char* Retrieve( Position P ){
+const char* RetrieveWord( Position P ){
     return P->Element;
 }
 
 
 /* Free the ram occupied from HashTable */
-void DestroyTable( HashTable H ){
+void DestroyWordsTable( HashTable H ){
     int i;
 
     for( i = 0; i < H->TableSize; i++ )
@@ -185,10 +172,10 @@ void DestroyTable( HashTable H ){
 
 
 /* Removes the Element X from the HashTable */
-HashTable Delete(const char* X, HashTable T ){
+HashTable DeleteWord(const char* X, HashTable T ){
     
     // Find the key of the Element X
-    int key = Hash(X, T->TableSize);
+    int key = HashWords(X, T->TableSize);
 
     //Key finded
     if(key != -1)
@@ -245,7 +232,7 @@ HashTable MakeEmpty( HashTable T ){
 
 
 /* Display HashTable in Terminal */
-void PrintHashTable(HashTable T)
+void PrintHashWordsTable(HashTable T)
 {
     printf("* Printing HashTable *\n");
 
@@ -258,6 +245,7 @@ void PrintHashTable(HashTable T)
             printf("%d\t[", i);
             while(P != NULL)
             {
+                P->Element[strcspn(P->Element, "\n")] = 0;
                 printf("%s", P->Element);
                 P = P->Next;
 
@@ -265,7 +253,7 @@ void PrintHashTable(HashTable T)
                 if(P != NULL)
                     printf(", ");
             }
-            //printf("]\n");
+            printf("]\n");
         }
         /*else
             printf("%d\t[%s]\n", i, "--");*/
@@ -273,50 +261,19 @@ void PrintHashTable(HashTable T)
 }
 
 
-int main()
+/* Change the characters of the word to the corresponding integer T9Key value */
+/*void WordToT9Keys(char *word)
 {
-    HashTable H = InitializeTable(50);
-
-    char line[MAX_LINE_SIZE];
-
-    FILE *fp;
-    fp = fopen("dictionaries/portuguese.txt", "r");
-
-    for(int i=0; i<10 ; i++)
+    //setlocale(LC_ALL, "");
+    int result=0;
+    //wprintf("%ls", word);
+    for(int i=0 ; i<strlen(word) ; i++)
     {
-        printf("%s", fgets(line, sizeof(line), fp));
-        line[strlen(line)] = '\0';
-        printf("%s", line);
-        Insert(line, H);
+        if(strcasecmp(word[i], "á") == 0)
+        {
+            printf("ITS á");
+        }
     }
 
-    PrintHashTable(H);
-
-    setlocale(LC_ALL, "");
-
-    wchar_t *word = L"água";
-    wchar_t *word2 = L"agua";
-
-    printf("aa %ld\n", wcslen(word));
-    printf("aa %ld\n", wcslen(word2));
-
-
-
-    unsigned int result = 0;
-
-    for(int i=0; i<wcslen(word); i++)
-    {
-        //Procurar key na hashtable de keys
-        //index = key;
-        //result += index*(wcslen(word)-i);
-    }
-
-
-    return 0;
-
-    //6 -> a, b
-    //2 -> c, d
-
-    //626
-    //266
-}
+    //return result;
+}*/

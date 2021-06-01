@@ -39,14 +39,14 @@ static int NextPrime( int N ){
 
 
 /* Hash function for ints */
-Index Hash( ElementType Key, int TableSize ){
+Index HashKeys( ElementType Key, int TableSize ){
     return Key % TableSize;
 }
 
 /* Initialize the Table, 
 making the correspondent malloc() and allocate the array of lists and them Headers 
 to use on HashTable positions */
-HashTable InitializeTable( int TableSize ){
+HashTable InitializeKeysTable( int TableSize ){
     HashTable H;
     int i;
 
@@ -97,7 +97,7 @@ Position Find( ElementType Key, HashTable H )
 
 
 /* Find the key in the given index */
-Position FindNth(char *Key, int Index, HashTable H )
+Position FindNthKey(char *Key, int Index, HashTable H )
 {
     List L = H->TheLists[Index];
     Position P = L->Next;
@@ -111,11 +111,11 @@ Position FindNth(char *Key, int Index, HashTable H )
 
 
 /* Insert the Element Key passed as argument in HashTable H */
-void InsertNth(char *Key, int Index, HashTable H ){
+void InsertNthKey(char *Key, int Index, HashTable H ){
     Position Pos, NewCell;
     List L;
 
-    Pos = FindNth(Key, Index, H);
+    Pos = FindNthKey(Key, Index, H);
 
     /* Key is not found */
     if( Pos == NULL ){  
@@ -184,13 +184,13 @@ void Insert( ElementType Key, HashTable H ){
 */
 
 /* Print the Element in Node P */
-const char* Retrieve( Position P ){
+const char* RetrieveKey( Position P ){
     return P->Element;
 }
 
 
 /* Free the ram occupied from HashTable */
-void DestroyTable( HashTable H ){
+void DestroyKeysTable( HashTable H ){
     int i;
 
     for( i = 0; i < H->TableSize; i++ )
@@ -257,8 +257,8 @@ HashTable Delete( ElementType X, HashTable T ){
 
 
 /* Free the allocated memory of Hashtable */
-HashTable MakeEmpty( HashTable T ){
-    /*for(int i=0 ; i<T->TableSize; i++)
+/*HashTable MakeEmpty( HashTable T ){
+    for(int i=0 ; i<T->TableSize; i++)
     {
         Position P = T->TheLists[i];
         while(P->Next != NULL)
@@ -266,15 +266,15 @@ HashTable MakeEmpty( HashTable T ){
             P = P->Next;
             free(P);
         }
-    }*/
+    }
 
     printf("\nTODO()\n");
     return T;
 }
-
+*/
 
 /* Display HashTable in Terminal */
-void PrintHashTable(HashTable T)
+void PrintHashKeysTable(HashTable T)
 {
     printf("* Printing HashTable *\n");
 
@@ -296,8 +296,8 @@ void PrintHashTable(HashTable T)
             }
             printf("]\n");
         }
-        else
-            printf("%d\t[%s]\n", i, "--");
+        /*else
+            printf("%d\t[%s]\n", i, "--");*/
     }
 }
 
@@ -305,49 +305,49 @@ void PrintHashTable(HashTable T)
 void InsertT9Keys(HashTable T)
 {
     //Key 2
-    InsertNth("a", 2, T);
-    InsertNth("b", 2, T);
-    InsertNth("c", 2, T);
-    InsertNth("á", 2, T);
-    InsertNth("à", 2, T);
-    InsertNth("â", 2, T);
-    InsertNth("ã", 2, T);
-    InsertNth("ç", 2, T);
-    //Key 3
-    InsertNth("d", 3, T);
-    InsertNth("e", 3, T);
-    InsertNth("f", 3, T);
-    InsertNth("é", 3, T);
-    InsertNth("ê", 3, T);
-    //Key 4
-    InsertNth("g", 4, T);
-    InsertNth("h", 4, T);
-    InsertNth("i", 4, T);
-    InsertNth("í", 4, T);
-    //Key 5
-    InsertNth("j", 5, T);
-    InsertNth("k", 5, T);
-    InsertNth("l", 5, T);
-    //Key 6
-    InsertNth("m", 6, T);
-    InsertNth("n", 6, T);
-    InsertNth("o", 6, T);
-    InsertNth("ó", 6, T);
-    InsertNth("ô", 6, T);
-    InsertNth("õ", 6, T);
-    //Key 7
-    InsertNth("p", 7, T);
-    InsertNth("q", 7, T);
-    InsertNth("r", 7, T);
-    InsertNth("s", 7, T);
-    //Key 8
-    InsertNth("t", 8, T);
-    InsertNth("u", 8, T);
-    InsertNth("v", 8, T);
-    InsertNth("ú", 8, T);
-    //Key 9
-    InsertNth("w", 9, T);
-    InsertNth("x", 9, T);
-    InsertNth("y", 9, T);
-    InsertNth("z", 9, T);
+    InsertNthKey("a", 2, T);
+    InsertNthKey("b", 2, T);
+    InsertNthKey("c", 2, T);
+    InsertNthKey("á", 2, T);
+    InsertNthKey("à", 2, T);
+    InsertNthKey("â", 2, T);
+    InsertNthKey("ã", 2, T);
+    InsertNthKey("ç", 2, T);
+    //Key 3KeyInsertNthKey
+    InsertNthKey("d", 3, T);
+    InsertNthKey("e", 3, T);
+    InsertNthKey("f", 3, T);
+    InsertNthKey("é", 3, T);
+    InsertNthKey("ê", 3, T);
+    //Key 4KeyInsertNthKey
+    InsertNthKey("g", 4, T);
+    InsertNthKey("h", 4, T);
+    InsertNthKey("i", 4, T);
+    InsertNthKey("í", 4, T);
+    //Key 5KeyInsertNthKey
+    InsertNthKey("j", 5, T);
+    InsertNthKey("k", 5, T);
+    InsertNthKey("l", 5, T);
+    //Key 6KeyInsertNthKey
+    InsertNthKey("m", 6, T);
+    InsertNthKey("n", 6, T);
+    InsertNthKey("o", 6, T);
+    InsertNthKey("ó", 6, T);
+    InsertNthKey("ô", 6, T);
+    InsertNthKey("õ", 6, T);
+    //Key 7KeyInsertNthKey
+    InsertNthKey("p", 7, T);
+    InsertNthKey("q", 7, T);
+    InsertNthKey("r", 7, T);
+    InsertNthKey("s", 7, T);
+    //Key 8KeyInsertNthKey
+    InsertNthKey("t", 8, T);
+    InsertNthKey("u", 8, T);
+    InsertNthKey("v", 8, T);
+    InsertNthKey("ú", 8, T);
+    //Key 9KeyInsertNthKey
+    InsertNthKey("w", 9, T);
+    InsertNthKey("x", 9, T);
+    InsertNthKey("y", 9, T);
+    InsertNthKey("z", 9, T);
 }

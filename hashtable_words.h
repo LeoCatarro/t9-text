@@ -1,8 +1,7 @@
 //typedef int ElementType;
 
-
-#ifndef _HashSep_H
-#define _HashSep_H
+/*#ifndef _HashSep_H
+#define _HashSep_H*/
 
 struct ListNode;
 typedef struct ListNode *Position;
@@ -10,15 +9,14 @@ typedef struct ListNode *Position;
 struct HashTbl;
 typedef struct HashTbl *HashTable;
 
-HashTable InitializeTable( int TableSize );
-void DestroyTable( HashTable H );
+HashTable InitializeWordsTable( int TableSize );
+void DestroyWordsTable( HashTable H );
 
-Position Find(const char* Key, HashTable H );
-void Insert(const char* Key, HashTable H );
-const char* Retrieve( Position P );
-void PrintHashTable(HashTable T);
+Position FindWord(const char* Key, HashTable H );
+void InsertWord(const char* Key, HashTable H );
+const char* RetrieveWord( Position P );
+void PrintHashWordsTable(HashTable T);
 
-HashTable Delete(const char* X, HashTable T );
+HashTable DeleteWord(const char* X, HashTable T );
 HashTable MakeEmpty( HashTable T );
-
-#endif
+//#endif
