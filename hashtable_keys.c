@@ -93,10 +93,7 @@ int FindKey( wchar_t Key, HashTable H )
         while(P != NULL)
         {
             if(P->Element == Key)
-            {
-                //printf("Key '%lc' at hastable index %d\n", Key, i);
                 return i;
-            }
             else
                 P = P->Next;
         }
@@ -112,7 +109,6 @@ Position FindNthKey(wchar_t Key, int Index, HashTable H )
     Position P = L->Next;
 
     while( P != NULL && P->Element != Key)
-        /* Probably need strcmp!! */
         P = P->Next;
     
     return P;
@@ -136,8 +132,6 @@ void InsertNthKey(wchar_t Key, int Index, HashTable H ){
         else{
             L = H->TheLists[Index];
             NewCell->Next = L->Next;
-            //NewCell->Element = malloc(sizeof(Key));
-            //strcpy(NewCell->Element, Key);
             NewCell->Element = Key;
             L->Next = NewCell;
         }
@@ -150,8 +144,6 @@ void InsertNthKey(wchar_t Key, int Index, HashTable H ){
         //to insert the element inside the list of the current hashtable position
         NewCell = malloc( sizeof( struct ListNode ) );
         Pos->Next = NewCell;
-        //NewCell->Element = malloc(sizeof(Key));
-        //strcpy(NewCell->Element,Key);
         NewCell->Element = Key;
         NewCell->Next = NULL;
     }
@@ -312,7 +304,7 @@ void PrintHashKeysTable(HashTable T)
     }
 }
 
-/* Insert the T9 Keys in hashtable */
+/* Inserts the T9 Keys and the characters for each key in hashtable */
 void InsertT9Keys(HashTable T)
 {
     //Key 2
@@ -364,15 +356,14 @@ void InsertT9Keys(HashTable T)
     InsertNthKey(L'z', 9, T);
 }
 
-int StringToIntAccordingT9Keys(wchar_t *word, HashTable KeysTable)
+/* Converts a string like "olá" to the corresponding sequence of integers(t9-keys). */
+unsigned int StringToIntAccordingT9Keys(wchar_t *word, HashTable KeysTable)
 {
-    int result = 0;
+    unsigned int result = 0;
 
     for(int i=0; i<wcslen(word); i++)
         {
-            //printf("Key To be finded: %lc\n", word[i]);
             int index = FindKey(word[i], KeysTable);
-            //printf("%d\n", index);
             result += index*(pow(10, wcslen(word)-i-1));
         }
     return result;

@@ -52,7 +52,7 @@ static int NextPrime( int N ){
    
     return HashVal % TableSize;
 }*/
-Index HashWords(int Key, int TableSize )
+unsigned int HashWords(int Key, int TableSize )
 {  
     return Key % TableSize;
 }
@@ -181,7 +181,7 @@ void DestroyWordsTable( HashTable H ){
 HashTable DeleteWord(wchar_t * X, int wordInInt, HashTable T ){
     
     // Find the key of the Element X
-    int key = HashWords(wordInInt, T->TableSize);
+    unsigned int key = HashWords(wordInInt, T->TableSize);
 
     //Key finded
     if(key != -1)

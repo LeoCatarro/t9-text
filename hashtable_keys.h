@@ -1,9 +1,6 @@
 typedef int ElementType;
 typedef unsigned int Index;
 
-/*#ifndef _HashSep_H
-#define _HashSep_H*/
-
 struct ListNode;
 typedef struct ListNode *Position;
 
@@ -24,6 +21,4 @@ void PrintHashKeysTable(HashTable T);
 //HashTable Delete( ElementType X, HashTable T );
 //HashTable MakeEmpty( HashTable T );
 
-int StringToIntAccordingT9Keys(wchar_t *word, HashTable KeysTable);
-
-//#endif
+unsigned int StringToIntAccordingT9Keys(wchar_t *word, HashTable KeysTable);

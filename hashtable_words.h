@@ -1,8 +1,3 @@
-//typedef int ElementType;
-
-/*#ifndef _HashSep_H
-#define _HashSep_H*/
-
 struct ListNode;
 typedef struct ListNode *Position;
 
@@ -19,6 +14,3 @@ void PrintHashWordsTable(HashTable T);
 
 HashTable DeleteWord(wchar_t * X, int wordInInt, HashTable T );
 HashTable MakeEmpty( HashTable T );
-
-
-//#endif
