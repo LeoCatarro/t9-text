@@ -360,26 +360,12 @@ void InsertT9Keys(HashTable T)
 /* Converts a string like "olá" to the corresponding sequence of integers(t9-keys). */
 unsigned int StringToIntAccordingT9Keys(wchar_t *word, HashTable KeysTable)
 {
-
-    wchar_t *cleanWord = (wchar_t*)malloc(sizeof(word));
-
-    //Clen word process
-    for(int i=0 ; i<wcslen(word); i++)
-    {
-        //Remove '-' from the word
-        if(word[i] == '-')
-            printf("Removed '-' from the word\n");
-        else
-            cleanWord[i]= towlower(word[i]);
-    }
-
-    printf("Clean Word: %ls\n", cleanWord);
     unsigned int result = 0;
 
-    for(int i=0; i<wcslen(cleanWord); i++)
-        {
-            int index = FindKey(cleanWord[i], KeysTable);
-            result += index*(pow(10, wcslen(cleanWord)-i-1));
-        }
+    for(int i=0; i<wcslen(word); i++)
+    {
+        int index = FindKey(word[i], KeysTable);
+        result += index*(pow(10, wcslen(word)-i-1));
+    }
     return result;
 }

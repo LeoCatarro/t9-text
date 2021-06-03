@@ -112,14 +112,14 @@ Position FindWord(wchar_t *Key, int wordinInt, HashTable H )
 
 
 /* Insert the Element Key passed as argument in HashTable H */
-void InsertWord(wchar_t * Key, int wordInInt, HashTable H ){
+void InsertWord(wchar_t *Key, int wordInInt, HashTable H ){
     Position Pos, NewCell;
     List L;
     Pos = FindWord( Key, wordInInt, H );
     //Key is not found
     if( Pos == NULL ){  
         NewCell = malloc( sizeof( struct ListNode ) );
-        NewCell->Element = (wchar_t*)malloc(sizeof(Key)+1);
+        NewCell->Element = (wchar_t*)malloc(sizeof(Key));
 
         if( NewCell == NULL )
             FatalError( "Out of space!!!" );
@@ -141,7 +141,7 @@ void InsertWord(wchar_t * Key, int wordInInt, HashTable H ){
         //If the key is found in HT, we need to create another node 
         //to insert the element inside the list of the current hashtable position
         NewCell = malloc( sizeof( struct ListNode ) );
-        NewCell->Element = (wchar_t*)malloc(sizeof(Key)+1);
+        NewCell->Element = (wchar_t*)malloc(sizeof(Key));
         Pos->Next = NewCell;
         NewCell->Element = Key;
         NewCell->Next = NULL;
