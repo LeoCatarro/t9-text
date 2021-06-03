@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
+#include <wchar.h>
 
 
 #define MAX_LINE_SIZE 233
@@ -13,7 +15,7 @@ typedef Position List;
 
 
 struct ListNode{
-    char *Element;
+    wchar_t *Element;
     Position Next;
 };
 
@@ -41,7 +43,7 @@ static int NextPrime( int N ){
 
 
 /* Hash function for ints */
-Index HashWords( const char *Key, int TableSize )
+/*Index HashWords(const char *Key, int TableSize )
 {
     unsigned int HashVal = 0;
 
@@ -49,6 +51,10 @@ Index HashWords( const char *Key, int TableSize )
         HashVal += *Key++;
    
     return HashVal % TableSize;
+}*/
+Index HashWords(int Key, int TableSize )
+{  
+    return Key % TableSize;
 }
 
 /* Test hash function */
@@ -91,12 +97,12 @@ HashTable InitializeWordsTable( int TableSize ){
 
 
 /* Find a Key in HashTable */
-Position FindWord(const char *Key, HashTable H )
-{
-    List L = H->TheLists[HashWords( Key, H->TableSize )];
+Position FindWord(wchar_t *Key, int wordinInt, HashTable H )
+{   
+    List L = H->TheLists[HashWords( wordinInt, H->TableSize )];
     Position P = L->Next;
 
-    while( P != NULL && strcmp(P->Element, Key)!=0 )
+    while( P != NULL && wcscmp(P->Element, Key)!=0 )
     {
         P = P->Next;
     }
@@ -106,45 +112,45 @@ Position FindWord(const char *Key, HashTable H )
 
 
 /* Insert the Element Key passed as argument in HashTable H */
-void InsertWord(const char* Key, HashTable H ){
+void InsertWord(wchar_t * Key, int wordInInt, HashTable H ){
     Position Pos, NewCell;
     List L;
-
-    Pos = FindWord( Key, H );
-
+    Pos = FindWord( Key, wordInInt, H );
     //Key is not found
     if( Pos == NULL ){  
         NewCell = malloc( sizeof( struct ListNode ) );
-        NewCell->Element = malloc(sizeof(Key));
+        NewCell->Element = (wchar_t*)malloc(sizeof(Key)+1);
 
         if( NewCell == NULL )
             FatalError( "Out of space!!!" );
         
         else{
-            L = H->TheLists[ HashWords( Key, H->TableSize ) ];
+            L = H->TheLists[ HashWords( wordInInt, H->TableSize ) ];
             NewCell->Next = L->Next;
             //NewCell->Element = Key; 
-            strcpy(NewCell->Element, Key);
+            NewCell->Element = Key;
             L->Next = NewCell;
+            printf("Inserted: %ls at index: %d\n", Key, HashWords( wordInInt, H->TableSize ));
         }
     }
 
     //Key is found in HashTable
     else
     {   
+        printf("Pos->Element: %ls\n", Pos->Element);
         //If the key is found in HT, we need to create another node 
         //to insert the element inside the list of the current hashtable position
         NewCell = malloc( sizeof( struct ListNode ) );
-        NewCell->Element = malloc(sizeof(Key));
+        NewCell->Element = (wchar_t*)malloc(sizeof(Key)+1);
         Pos->Next = NewCell;
-        //NewCell->Element = Key;
-        strcpy(NewCell->Element, Key);
+        NewCell->Element = Key;
         NewCell->Next = NULL;
+        printf("Inserted: %ls at index: %d\n", Key, HashWords( wordInInt, H->TableSize ));
     }
 }
 
 /* Print the Element in Node P */
-const char* RetrieveWord( Position P ){
+wchar_t* RetrieveWord( Position P ){
     return P->Element;
 }
 
@@ -172,10 +178,10 @@ void DestroyWordsTable( HashTable H ){
 
 
 /* Removes the Element X from the HashTable */
-HashTable DeleteWord(const char* X, HashTable T ){
+HashTable DeleteWord(wchar_t * X, int wordInInt, HashTable T ){
     
     // Find the key of the Element X
-    int key = HashWords(X, T->TableSize);
+    int key = HashWords(wordInInt, T->TableSize);
 
     //Key finded
     if(key != -1)
@@ -187,17 +193,17 @@ HashTable DeleteWord(const char* X, HashTable T ){
         //X finded 
         while(P != NULL)
         {
-            if(strcmp(P->Element, X) == 0 && P->Next != NULL)
+            if(wcscmp(P->Element, X) == 0 && P->Next != NULL)
             {   
-                printf("Deleted [%s] at index %d from HashTable\n", P->Element, key);
+                printf("Deleted [%ls] at index %d from HashTable\n", P->Element, key);
                 prevP->Next = P->Next->Next;
                 return T;
             }
 
-            else if(strcmp(P->Element, X) && P->Next == NULL)
+            else if(wcscmp(P->Element, X) && P->Next == NULL)
             {
                 prevP->Next = NULL;
-                printf("Deleted [%s] at index %d from HashTable\n", P->Element, key);
+                printf("Deleted [%ls] at index %d from HashTable\n", P->Element, key);
                 return T;
             }
 
@@ -245,8 +251,9 @@ void PrintHashWordsTable(HashTable T)
             printf("%d\t[", i);
             while(P != NULL)
             {
-                P->Element[strcspn(P->Element, "\n")] = 0;
-                printf("%s", P->Element);
+                P->Element[wcslen(P->Element)+1] = 0;
+                printf("%ls", P->Element);
+                printf(" %ld", wcslen(P->Element));
                 P = P->Next;
 
                 //If is not the last element
@@ -259,21 +266,3 @@ void PrintHashWordsTable(HashTable T)
             printf("%d\t[%s]\n", i, "--");*/
     }
 }
-
-
-/* Change the characters of the word to the corresponding integer T9Key value */
-/*void WordToT9Keys(char *word)
-{
-    //setlocale(LC_ALL, "");
-    int result=0;
-    //wprintf("%ls", word);
-    for(int i=0 ; i<strlen(word) ; i++)
-    {
-        if(strcasecmp(word[i], "á") == 0)
-        {
-            printf("ITS á");
-        }
-    }
-
-    //return result;
-}*/

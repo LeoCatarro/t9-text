@@ -4,6 +4,7 @@
 #include <string.h>
 #include <locale.h>
 #include <wchar.h>
+#include <math.h>
 
 #include "hashtable_keys.h"
 #include "hashtable_words.h"
@@ -15,6 +16,22 @@ struct ListNode{
     Position Next;
 };
 
+/*
+int StringToIntAccordingT9Keys(wchar_t *word, HashTable KeysTable)
+{
+    int result = 0;
+
+    for(int i=0; i<wcslen(word); i++)
+        {
+            //printf("Key To be finded: %lc\n", word[i]);
+            int index = FindKey(word[i], KeysTable);
+            //printf("%d\n", index);
+            result += index*(pow(10, wcslen(word)-i-1));
+        }
+    return result;
+}
+*/
+
 
 int main()
 {   
@@ -25,81 +42,29 @@ int main()
  
 
     setlocale(LC_ALL, "");
-    const wchar_t special_chars[13] = {L'á', L'à', L'â', L'ã',L'ç', L'é', L'ê', L'í', L'ó', L'ô', L'õ', L'ú'};
+    //const wchar_t special_chars[13] = {L'á', L'à', L'â', L'ã',L'ç', L'é', L'ê', L'í', L'ó', L'ô', L'õ', L'ú'};
     FILE *fp;
     wchar_t word[BUFFER_LENGTH];
     fp = fopen("dictionaries/portuguese-small.txt", "rb");
 
     HashTable KeysTable = InitializeKeysTable(10);
-    
+    HashTable WordsTable = InitializeWordsTable(50);
+
     InsertT9Keys(KeysTable);
     PrintHashKeysTable(KeysTable);
 
     while(fwscanf(fp,L"%ls", word) != EOF)
     {
-        //wchar_t result[wcslen(word)];
-        char *result;
+        wchar_t *word_ = malloc(sizeof(word));
+        wcscpy(word_, word);
         printf("Line Size: %ld\n", wcslen(word));
         printf("Line: %ls\n", word);
-
-        for(int i=0; i<wcslen(word); i++)
-        {
-            Position P = malloc(sizeof(struct ListNode));
-            //printf("%lc\n", word[i]);
-            printf("Key To be finded: %lc\n", word[i]);
-            //P = FindKey(word[i], KeysTable);    //Needs to be fixed!
-            sprintf(str, "%d", i);
-            char c = FindKey(word[i], KeysTable)+'0';
-            //printf("Finded word[i] at index: %c\n", c);
-            strncat(result, &c, 1);
-        }
-        printf("String to Integers keys: %s\n", result);
-        /*for(int i=0; i<wcslen(word); i++)
-        {
-            //Key 2 char match
-            if(word[i] == special_chars[0] || word[i] == special_chars[1] || word[i] == special_chars[2] || word[i] == special_chars[3] || word[i] == special_chars[4])
-            {
-                Position P = FindNthKey(special_chars[0], 2, KeysTable);
-                printf("P->Element: %lc\n", P->Element);
-                printf("MATCH WITH: á OR à OR â OR ã OR ç\n");
-                char c = '2';
-                strncat(result, &c, 1);
-            }
-
-            //Key 3 char match
-            else if(word[i] == special_chars[5] || word[i] == special_chars[6])
-            {
-                printf("MATCH WITH: é OR ê\n");
-                char c = '3';
-                strncat(result, &c, 1);
-            }
-
-            //Key 4 char match
-            else if(word[i] == special_chars[7])
-            {
-                printf("MATCH WITH: í\n");
-                char c = '4';
-                strncat(result, &c, 1);
-            }
-
-            //Key 6 char match
-            else if(word[i] == special_chars[8] || word[i] == special_chars[9] || word[i] == special_chars[10])
-            {
-                printf("MATCH WITH: ó OR ô OR õ\n");
-                char c = '6';
-                strncat(result, &c, 1);
-            }
-
-            //Key 8 char match
-            else if(word[i] == special_chars[11])
-            {
-                printf("MATCH WITH: ú\n");
-                char c = '8';
-                strncat(result, &c, 1);
-            }
-        }*/
-        //printf("String to Integers keys: %s\n", result);
+        int res = StringToIntAccordingT9Keys(word, KeysTable);
+        printf("Res: %d\n", res);
+        InsertWord(word_, res, WordsTable);
     }
+
+    PrintHashWordsTable(WordsTable);
     fclose(fp);
     return 0;
 }

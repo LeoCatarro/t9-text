@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
+#include <wchar.h>
 
 
 #define MinTableSize (10)
@@ -82,7 +84,7 @@ HashTable InitializeKeysTable( int TableSize ){
 
 /* Find a Key in HashTable */
 
-Index FindKey( wchar_t Key, HashTable H )
+int FindKey( wchar_t Key, HashTable H )
 {
     for(int i=0 ; i < H->TableSize ; i++)
     {   
@@ -92,7 +94,7 @@ Index FindKey( wchar_t Key, HashTable H )
         {
             if(P->Element == Key)
             {
-                printf("%d\n", i);
+                //printf("Key '%lc' at hastable index %d\n", Key, i);
                 return i;
             }
             else
@@ -360,4 +362,18 @@ void InsertT9Keys(HashTable T)
     InsertNthKey(L'x', 9, T);
     InsertNthKey(L'y', 9, T);
     InsertNthKey(L'z', 9, T);
+}
+
+int StringToIntAccordingT9Keys(wchar_t *word, HashTable KeysTable)
+{
+    int result = 0;
+
+    for(int i=0; i<wcslen(word); i++)
+        {
+            //printf("Key To be finded: %lc\n", word[i]);
+            int index = FindKey(word[i], KeysTable);
+            //printf("%d\n", index);
+            result += index*(pow(10, wcslen(word)-i-1));
+        }
+    return result;
 }
