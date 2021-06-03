@@ -363,10 +363,14 @@ unsigned int StringToIntAccordingT9Keys(wchar_t *word, HashTable KeysTable)
 
     wchar_t *cleanWord = (wchar_t*)malloc(sizeof(word));
 
-    //Verification of upper case Letters
+    //Clen word process
     for(int i=0 ; i<wcslen(word); i++)
     {
-        cleanWord[i]= towlower(word[i]);
+        //Remove '-' from the word
+        if(word[i] == '-')
+            printf("Removed '-' from the word\n");
+        else
+            cleanWord[i]= towlower(word[i]);
     }
 
     printf("Clean Word: %ls\n", cleanWord);
