@@ -1,5 +1,5 @@
 typedef int ElementType;
-
+typedef unsigned int Index;
 
 /*#ifndef _HashSep_H
 #define _HashSep_H*/
@@ -13,7 +13,7 @@ typedef struct HashTbl *HashTable;
 HashTable InitializeKeysTable( int TableSize );
 void DestroyKeysTable( HashTable H );
 
-Position FindKey(wchar_t Key, HashTable H );
+Index FindKey(wchar_t Key, HashTable H );
 Position FindNthKey(wchar_t Key, int Index, HashTable T );
 //void Insert( ElementType Key, HashTable H );
 void InsertNthKey(wchar_t Key, int Index, HashTable T );

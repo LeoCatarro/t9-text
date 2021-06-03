@@ -10,6 +10,12 @@
 
 #define BUFFER_LENGTH 233
 
+struct ListNode{
+    wchar_t Element;
+    Position Next;
+};
+
+
 int main()
 {   
     //
@@ -31,16 +37,30 @@ int main()
 
     while(fwscanf(fp,L"%ls", word) != EOF)
     {
-        char result[] = "";
+        //wchar_t result[wcslen(word)];
+        char *result;
         printf("Line Size: %ld\n", wcslen(word));
         printf("Line: %ls\n", word);
 
         for(int i=0; i<wcslen(word); i++)
         {
+            Position P = malloc(sizeof(struct ListNode));
+            //printf("%lc\n", word[i]);
+            printf("Key To be finded: %lc\n", word[i]);
+            //P = FindKey(word[i], KeysTable);    //Needs to be fixed!
+            sprintf(str, "%d", i);
+            char c = FindKey(word[i], KeysTable)+'0';
+            //printf("Finded word[i] at index: %c\n", c);
+            strncat(result, &c, 1);
+        }
+        printf("String to Integers keys: %s\n", result);
+        /*for(int i=0; i<wcslen(word); i++)
+        {
             //Key 2 char match
             if(word[i] == special_chars[0] || word[i] == special_chars[1] || word[i] == special_chars[2] || word[i] == special_chars[3] || word[i] == special_chars[4])
             {
                 Position P = FindNthKey(special_chars[0], 2, KeysTable);
+                printf("P->Element: %lc\n", P->Element);
                 printf("MATCH WITH: á OR à OR â OR ã OR ç\n");
                 char c = '2';
                 strncat(result, &c, 1);
@@ -77,8 +97,8 @@ int main()
                 char c = '8';
                 strncat(result, &c, 1);
             }
-        }
-        printf("String to Integers keys: %s\n", result);
+        }*/
+        //printf("String to Integers keys: %s\n", result);
     }
     fclose(fp);
     return 0;

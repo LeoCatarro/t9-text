@@ -82,16 +82,24 @@ HashTable InitializeKeysTable( int TableSize ){
 
 /* Find a Key in HashTable */
 
-Position FindKey( wchar_t Key, HashTable H )
+Index FindKey( wchar_t Key, HashTable H )
 {
-    List L = H->TheLists[HashKeys( Key, H->TableSize )];
-    Position P = L->Next;
+    for(int i=0 ; i < H->TableSize ; i++)
+    {   
+        Position P = H->TheLists[i]->Next;
 
-    while( P != NULL && P->Element != Key )
-        //Probably need strcmp!!
-        P = P->Next;
-    
-    return P;
+        while(P != NULL)
+        {
+            if(P->Element == Key)
+            {
+                printf("%d\n", i);
+                return i;
+            }
+            else
+                P = P->Next;
+        }
+    }
+    return -1;
 }
 
 
@@ -277,7 +285,7 @@ HashTable Delete( ElementType X, HashTable T ){
 /* Display HashTable in Terminal */
 void PrintHashKeysTable(HashTable T)
 {
-    printf("* Printing HashTable *\n");
+    printf("* Printing Keys HashTable *\n");
 
     for(int i=0 ; i < T->TableSize ; i++)
     {   
@@ -306,6 +314,7 @@ void PrintHashKeysTable(HashTable T)
 void InsertT9Keys(HashTable T)
 {
     //Key 2
+    InsertNthKey(L'á', 2, T);
     InsertNthKey(L'a', 2, T);
     InsertNthKey(L'b', 2, T);
     InsertNthKey(L'c', 2, T);
