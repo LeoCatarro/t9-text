@@ -1,11 +1,12 @@
-#include "fatal.h"
-#include "hashtable_keys.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
 #include <wchar.h>
+#include <wctype.h>
 
+#include "fatal.h"
+#include "hashtable_keys.h"
 
 #define MinTableSize (10)
 typedef unsigned int Index;
@@ -359,12 +360,22 @@ void InsertT9Keys(HashTable T)
 /* Converts a string like "olá" to the corresponding sequence of integers(t9-keys). */
 unsigned int StringToIntAccordingT9Keys(wchar_t *word, HashTable KeysTable)
 {
+
+    wchar_t *cleanWord = (wchar_t*)malloc(sizeof(word));
+
+    //Verification of upper case Letters
+    for(int i=0 ; i<wcslen(word); i++)
+    {
+        cleanWord[i]= towlower(word[i]);
+    }
+
+    printf("Clean Word: %ls\n", cleanWord);
     unsigned int result = 0;
 
-    for(int i=0; i<wcslen(word); i++)
+    for(int i=0; i<wcslen(cleanWord); i++)
         {
-            int index = FindKey(word[i], KeysTable);
-            result += index*(pow(10, wcslen(word)-i-1));
+            int index = FindKey(cleanWord[i], KeysTable);
+            result += index*(pow(10, wcslen(cleanWord)-i-1));
         }
     return result;
 }
