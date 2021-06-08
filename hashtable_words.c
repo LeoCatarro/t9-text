@@ -139,16 +139,24 @@ void InsertWord(wchar_t *Key, long wordInInt, HashTable H ){
     //Key is found in HashTable
     else
     {   
-        //If the key is found in HT, we need to create another node 
-        //to insert the element inside the list of the current hashtable position
-        NewCell = malloc( sizeof( struct ListNode ) );
-        //NewCell->Element = (wchar_t*)malloc(sizeof(Key));
-        NewCell->Element = (wchar_t*)malloc(sizeof(wchar_t*)*wcslen(Key));
-        printf("NewCell->Element size = %ld\n", wcslen(Key));
-        Pos->Next = NewCell;
-        NewCell->Element = Key;
-        NewCell->Next = NULL;
-        printf("Inserted: %ls at index: %d\n", Key, HashWords( wordInInt, H->TableSize ));
+        //If the word is already in the HashTable, we dont want to repeat it
+        if(wcscmp(Pos->Element, Key) == 0)
+        {
+            return;
+        }
+        else
+        {
+            //If the key is found in HT, we need to create another node 
+            //to insert the element inside the list of the current hashtable position
+            NewCell = malloc( sizeof( struct ListNode ) );
+            //NewCell->Element = (wchar_t*)malloc(sizeof(Key));
+            NewCell->Element = (wchar_t*)malloc(sizeof(wchar_t*)*wcslen(Key));
+            printf("NewCell->Element size = %ld\n", wcslen(Key));
+            Pos->Next = NewCell;
+            NewCell->Element = Key;
+            NewCell->Next = NULL;
+            printf("Inserted: %ls at index: %d\n", Key, HashWords( wordInInt, H->TableSize ));
+        }
     }
 }
 
