@@ -52,7 +52,7 @@ static int NextPrime( int N ){
    
     return HashVal % TableSize;
 }*/
-unsigned int HashWords(int Key, int TableSize )
+unsigned int HashWords(long Key, int TableSize )
 {  
     return Key % TableSize;
 }
@@ -97,7 +97,7 @@ HashTable InitializeWordsTable( int TableSize ){
 
 
 /* Find a Key in HashTable */
-Position FindWord(wchar_t *Key, int wordinInt, HashTable H )
+Position FindWord(wchar_t *Key, long wordinInt, HashTable H )
 {   
     List L = H->TheLists[HashWords( wordinInt, H->TableSize )];
     Position P = L->Next;
@@ -112,14 +112,16 @@ Position FindWord(wchar_t *Key, int wordinInt, HashTable H )
 
 
 /* Insert the Element Key passed as argument in HashTable H */
-void InsertWord(wchar_t *Key, int wordInInt, HashTable H ){
+void InsertWord(wchar_t *Key, long wordInInt, HashTable H ){
     Position Pos, NewCell;
     List L;
     Pos = FindWord( Key, wordInInt, H );
     //Key is not found
     if( Pos == NULL ){  
         NewCell = malloc( sizeof( struct ListNode ) );
-        NewCell->Element = (wchar_t*)malloc(sizeof(Key));
+        //NewCell->Element = (wchar_t*)malloc(sizeof(Key));
+        NewCell->Element = (wchar_t*)malloc(sizeof(wchar_t*)*wcslen(Key));
+        printf("NewCell->Element size = %ld\n", wcslen(Key));
 
         if( NewCell == NULL )
             FatalError( "Out of space!!!" );
@@ -137,11 +139,12 @@ void InsertWord(wchar_t *Key, int wordInInt, HashTable H ){
     //Key is found in HashTable
     else
     {   
-        printf("Pos->Element: %ls\n", Pos->Element);
         //If the key is found in HT, we need to create another node 
         //to insert the element inside the list of the current hashtable position
         NewCell = malloc( sizeof( struct ListNode ) );
-        NewCell->Element = (wchar_t*)malloc(sizeof(Key));
+        //NewCell->Element = (wchar_t*)malloc(sizeof(Key));
+        NewCell->Element = (wchar_t*)malloc(sizeof(wchar_t*)*wcslen(Key));
+        printf("NewCell->Element size = %ld\n", wcslen(Key));
         Pos->Next = NewCell;
         NewCell->Element = Key;
         NewCell->Next = NULL;
@@ -178,10 +181,10 @@ void DestroyWordsTable( HashTable H ){
 
 
 /* Removes the Element X from the HashTable */
-HashTable DeleteWord(wchar_t * X, int wordInInt, HashTable T ){
+HashTable DeleteWord(wchar_t * X, long wordInInt, HashTable T ){
     
     // Find the key of the Element X
-    unsigned int key = HashWords(wordInInt, T->TableSize);
+    unsigned long key = HashWords(wordInInt, T->TableSize);
 
     //Key finded
     if(key != -1)
@@ -195,7 +198,7 @@ HashTable DeleteWord(wchar_t * X, int wordInInt, HashTable T ){
         {
             if(wcscmp(P->Element, X) == 0 && P->Next != NULL)
             {   
-                printf("Deleted [%ls] at index %d from HashTable\n", P->Element, key);
+                printf("Deleted [%ls] at index %ld from HashTable\n", P->Element, key);
                 prevP->Next = P->Next->Next;
                 return T;
             }
@@ -203,7 +206,7 @@ HashTable DeleteWord(wchar_t * X, int wordInInt, HashTable T ){
             else if(wcscmp(P->Element, X) && P->Next == NULL)
             {
                 prevP->Next = NULL;
-                printf("Deleted [%ls] at index %d from HashTable\n", P->Element, key);
+                printf("Deleted [%ls] at index %ld from HashTable\n", P->Element, key);
                 return T;
             }
 

@@ -55,7 +55,7 @@ int main()
     wchar_t buffer[BUFFER_LENGTH];
     setlocale(LC_ALL, "");
     FILE *fp;
-    fp = fopen("dictionaries/portuguese-small.txt", "rb");
+    fp = fopen("dictionaries/portuguese.txt", "rb");
 
     HashTable KeysTable = InitializeKeysTable(10);
     HashTable WordsTable = InitializeWordsTable(100);
@@ -77,8 +77,8 @@ int main()
         cleanWord[wcslen(cleanWord)] = '\0';
         printf("cleanWord Size: %ld\n", wcslen(cleanWord));
         printf("Cleaned Word: %ls\n", cleanWord);
-        unsigned int res = StringToIntAccordingT9Keys(cleanWord, KeysTable);
-        printf("Res: %d\n", res);
+        unsigned long res = StringToIntAccordingT9Keys(cleanWord, KeysTable);
+        printf("Res: %ld\n", res);
         InsertWord(tmpWord, res, WordsTable);
         printf("\n\n");
     }

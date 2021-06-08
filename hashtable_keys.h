@@ -21,4 +21,4 @@ void PrintHashKeysTable(HashTable T);
 //HashTable Delete( ElementType X, HashTable T );
 //HashTable MakeEmpty( HashTable T );
 
-unsigned int StringToIntAccordingT9Keys(wchar_t *word, HashTable KeysTable);
+unsigned long StringToIntAccordingT9Keys(wchar_t *word, HashTable KeysTable);
