@@ -2,10 +2,6 @@
 //  Compile line: gcc -std=c99 -Wall hashtable_words.c hashtable_keys.c main.c -o main -lm
 //
 
-//
-// Notes: Fix bugs with upperCase letters and word with " ' " or with " - " 
-//
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -55,10 +51,10 @@ int main()
     wchar_t buffer[BUFFER_LENGTH];
     setlocale(LC_ALL, "");
     FILE *fp;
-    fp = fopen("dictionaries/portuguese.txt", "rb");
+    fp = fopen("dictionaries/portuguese-large.txt", "rb");
 
     HashTable KeysTable = InitializeKeysTable(10);
-    HashTable WordsTable = InitializeWordsTable(100);
+    HashTable WordsTable = InitializeWordsTable(1000000);
 
     InsertT9Keys(KeysTable);
     PrintHashKeysTable(KeysTable);
@@ -69,18 +65,16 @@ int main()
     while(fwscanf(fp,L"%ls", buffer) != EOF)
     {
         tmpWord = (wchar_t*)malloc(sizeof(wchar_t*)*wcslen(buffer));
-        wcscpy(tmpWord, buffer);
-        printf("Line Size: %ld\n", wcslen(tmpWord));
+        tmpWord = wcscpy(tmpWord, buffer);
+        //printf("Line Size: %ld\n", wcslen(tmpWord));
         printf("Line: %ls\n", tmpWord);
-        cleanWord = (wchar_t*)malloc(sizeof(wchar_t*)*wcslen(tmpWord));
         cleanWord = CleanWordProcess(tmpWord);
-        cleanWord[wcslen(cleanWord)] = '\0';
-        printf("cleanWord Size: %ld\n", wcslen(cleanWord));
-        printf("Cleaned Word: %ls\n", cleanWord);
+        //printf("cleanWord Size: %ld\n", wcslen(cleanWord));
+        //printf("Cleaned Word: %ls\n", cleanWord);
         unsigned long res = StringToIntAccordingT9Keys(cleanWord, KeysTable);
-        printf("Res: %ld\n", res);
+        //printf("Res: %ld\n", res);
         InsertWord(tmpWord, res, WordsTable);
-        printf("\n\n");
+        //printf("\n\n");
     }
 
     PrintHashWordsTable(WordsTable);
