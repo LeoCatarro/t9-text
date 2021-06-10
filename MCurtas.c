@@ -15,6 +15,20 @@
 #include "hashtable_words.h"
 
 #define BUFFER_LENGTH 233
+#define WORDS_TABLE_SIZE 1000000
+#define KEYS_TABLE_SIZE 10
+
+//Open the dictionary via fileName passed as argument of the program
+FILE *FileOpen(char *fileName)
+{
+    FILE *fp;
+    char filePath[BUFFER_LENGTH] = "dictionaries/";
+    strcat(filePath, fileName);
+
+    fp = fopen(filePath, "rb");
+
+    return fp;
+}
 
 wchar_t *CleanWordProcess(wchar_t* word)
 {
@@ -40,25 +54,14 @@ wchar_t *CleanWordProcess(wchar_t* word)
     return cleanWord2;
 }
 
-
-int main()
-{   
-    //
-    // Notes: 
-    //  ->code for read a file to wchar_t array : https://www.ibm.com/docs/en/i/7.4?topic=lf-fwscanf-read-data-from-stream-using-wide-character
-    //
+//Read the lines from the file and insert them into WordsTable, after line been processed and word cleaned!
+void ProcessData(FILE *fp, HashTable KeysTable, HashTable WordsTable)
+{
+    InsertT9Keys(KeysTable);        //Insert Keys in KeysTable
     
+    printf("Loading lines...\n");
+
     wchar_t buffer[BUFFER_LENGTH];
-    setlocale(LC_ALL, "");
-    FILE *fp;
-    fp = fopen("dictionaries/portuguese-large.txt", "rb");
-
-    HashTable KeysTable = InitializeKeysTable(10);
-    HashTable WordsTable = InitializeWordsTable(1000000);
-
-    InsertT9Keys(KeysTable);
-    PrintHashKeysTable(KeysTable);
-
     wchar_t *tmpWord;
     wchar_t *cleanWord;
 
@@ -66,20 +69,31 @@ int main()
     {
         tmpWord = (wchar_t*)malloc(sizeof(wchar_t*)*wcslen(buffer));
         tmpWord = wcscpy(tmpWord, buffer);
-        //printf("Line Size: %ld\n", wcslen(tmpWord));
-        printf("Line: %ls\n", tmpWord);
         cleanWord = CleanWordProcess(tmpWord);
-        //printf("cleanWord Size: %ld\n", wcslen(cleanWord));
-        //printf("Cleaned Word: %ls\n", cleanWord);
         unsigned long res = StringToIntAccordingT9Keys(cleanWord, KeysTable);
-        //printf("Res: %ld\n", res);
         InsertWord(tmpWord, res, WordsTable);
-        //printf("\n\n");
     }
 
-    PrintHashWordsTable(WordsTable);
     free(tmpWord);
     free(cleanWord);
+    printf("Lines loaded successfuly!\n");
+}
+
+int main(int argc, char* argv[])
+{   
+    // Notes: code for read a file to wchar_t array : https://www.ibm.com/docs/en/i/7.4?topic=lf-fwscanf-read-data-from-stream-using-wide-character
+    setlocale(LC_ALL, "");
+    FILE *fp;
+
+    fp = FileOpen(argv[1]);
+
+    HashTable KeysTable = InitializeKeysTable(KEYS_TABLE_SIZE);
+    HashTable WordsTable = InitializeWordsTable(WORDS_TABLE_SIZE);
+
+    ProcessData(fp, KeysTable, WordsTable);
+
+    PrintHashWordsTable(WordsTable);
+
     fclose(fp);
     return 0;
 }
