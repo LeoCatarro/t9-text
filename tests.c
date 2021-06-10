@@ -6,14 +6,19 @@
 #include <time.h>
 #include <wctype.h>
 
-  
-int main(void)
-{
-    wchar_t *str = L"Aqui";
 
-    for(int i=0 ; i<wcslen(str); i++)
+int main(int argc,char* argv[])
+{
+    int counter;
+    printf("Program Name Is: %s",argv[0]);
+    if(argc==1)
+        printf("\nNo Extra Command Line Argument Passed Other Than Program Name");
+    if(argc>=2)\
     {
-        putwchar(towlower(str[i]));
+        printf("\nNumber Of Arguments Passed: %d",argc);
+        printf("\n----Following Are The Command Line Arguments Passed----");
+        for(counter=0;counter<argc;counter++)
+            printf("\nargv[%d]: %s",counter,argv[counter]);
     }
     return 0;
 }
