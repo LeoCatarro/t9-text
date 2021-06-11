@@ -1,5 +1,5 @@
 //
-//  Compile line: gcc -std=c99 -Wall hashtable_words.c hashtable_keys.c main.c -o main -lm
+//  Compile line: gcc -std=c99 -Wall hashtable_words.c hashtable_keys.c MCurtas.c -o MCurtas -lm
 //
 
 // Notes: code for read a file to wchar_t array : https://www.ibm.com/docs/en/i/7.4?topic=lf-fwscanf-read-data-from-stream-using-wide-character
@@ -11,6 +11,7 @@
 #include <wchar.h>
 #include <math.h>
 #include <wctype.h>
+#include <time.h>
 
 #include "fatal.h"
 #include "hashtable_keys.h"
@@ -58,7 +59,7 @@ wchar_t *CleanWordProcess(wchar_t* word)
             tmpWord[i]= towlower(word[i]);
         }
     }
-    printf("Word after clean process: %ls\n", tmpWord);
+    //printf("Word after clean process: %ls\n", tmpWord);
     wchar_t *cleanWord2 = (wchar_t*)malloc(sizeof(wchar_t*)*wcslen(tmpWord));
     wcscpy(cleanWord2, tmpWord);
     free(tmpWord);
@@ -71,7 +72,7 @@ void ProcessData(FILE *fp, HashTable KeysTable, HashTable WordsTable)
 {
     InsertT9Keys(KeysTable);        //Insert Keys in KeysTable
     
-    printf("Loading lines...\n");
+    printf("Loading dictionary...\n");
 
     wchar_t buffer[BUFFER_LENGTH];
     wchar_t *tmpWord;
@@ -88,7 +89,7 @@ void ProcessData(FILE *fp, HashTable KeysTable, HashTable WordsTable)
 
     free(tmpWord);
     free(cleanWord);
-    printf("Lines loaded successfuly!\n");
+    printf("Dictionary successfuly loaded!\n");
 }
 
 
@@ -97,6 +98,8 @@ void ProcessData(FILE *fp, HashTable KeysTable, HashTable WordsTable)
 
 int main(int argc, char* argv[])
 {   
+    clock_t begin = clock();
+
     setlocale(LC_ALL, "");
     
     //Open dictionary
@@ -110,9 +113,16 @@ int main(int argc, char* argv[])
     //Read the dictionary, process word by word and insert them in WordsTable
     ProcessData(fp, KeysTable, WordsTable);
 
-    PrintHashWordsTable(WordsTable);
+    
 
     //Close dictionary
     CloseFile(fp);
+
+    clock_t end = clock();
+    double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+    printf("EXEC TIME: %f s\n", time_spent);
+
+    //PrintHashWordsTable(WordsTable);
+
     return 0;
 }

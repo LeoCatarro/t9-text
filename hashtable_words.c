@@ -121,7 +121,7 @@ void InsertWord(wchar_t *Key, long wordInInt, HashTable H ){
         NewCell = malloc( sizeof( struct ListNode ) );
         //NewCell->Element = (wchar_t*)malloc(sizeof(Key));
         NewCell->Element = (wchar_t*)malloc(sizeof(wchar_t*)*wcslen(Key));
-        printf("NewCell->Element size = %ld\n", wcslen(Key));
+        //printf("NewCell->Element size = %ld\n", wcslen(Key));
 
         if( NewCell == NULL )
             FatalError( "Out of space!!!" );
@@ -132,7 +132,7 @@ void InsertWord(wchar_t *Key, long wordInInt, HashTable H ){
             //NewCell->Element = Key; 
             NewCell->Element = Key;
             L->Next = NewCell;
-            printf("Inserted: %ls at index: %d\n", Key, HashWords( wordInInt, H->TableSize ));
+            //printf("Inserted: %ls at index: %d\n", Key, HashWords( wordInInt, H->TableSize ));
         }
     }
 
@@ -155,7 +155,7 @@ void InsertWord(wchar_t *Key, long wordInInt, HashTable H ){
             Pos->Next = NewCell;
             NewCell->Element = Key;
             NewCell->Next = NULL;
-            printf("Inserted: %ls at index: %d\n", Key, HashWords( wordInInt, H->TableSize ));
+            //printf("Inserted: %ls at index: %d\n", Key, HashWords( wordInInt, H->TableSize ));
         }
     }
 }
