@@ -22,7 +22,7 @@
 #define KEYS_TABLE_SIZE 10
 
 //Open the dictionary via fileName passed as argument of the program
-FILE *OpenFile(char *fileName)
+FILE *OpenDictionary(char *fileName)
 {
     FILE *fp;
     char filePath[BUFFER_LENGTH] = "dictionaries/";
@@ -33,9 +33,27 @@ FILE *OpenFile(char *fileName)
     return fp;
 }
 
+//Copies all words in fp to an updated dictionary and add the word passed as argument
+void UpdateDictionary(wchar_t *word, FILE *fp, char *fileName)
+{
+    printf("%ls\n", word);
+    char ch;
+    FILE *fp_updated;
+    fp_updated = fopen("updated.txt", "w");
+
+
+    while( ( ch = fgetc(fp) ) != EOF )
+      fputc(ch, fp_updated);
+    
+    fwrite(word, sizeof(wcslen(word)), 1, fp_updated );
+
+    fclose(fp_updated);
+    printf("Dictionary updated with word %ls\n", word);  
+}
+
 
 //Close the dictionary
-void CloseFile(FILE *file)
+void CloseDictionary(FILE *file)
 {
     fclose(file);
 }
@@ -60,10 +78,10 @@ wchar_t *CleanWordProcess(wchar_t* word)
         }
     }
     //printf("Word after clean process: %ls\n", tmpWord);
-    wchar_t *cleanWord2 = (wchar_t*)malloc(sizeof(wchar_t*)*wcslen(tmpWord));
-    wcscpy(cleanWord2, tmpWord);
+    wchar_t *wordClean = (wchar_t*)malloc(sizeof(wchar_t*)*wcslen(tmpWord));
+    wcscpy(wordClean, tmpWord);
     free(tmpWord);
-    return cleanWord2;
+    return wordClean;
 }
 
 
@@ -97,14 +115,13 @@ void ProcessData(FILE *fp, HashTable KeysTable, HashTable WordsTable)
 
 
 int main(int argc, char* argv[])
-{   
+{  
+    setlocale(LC_ALL, ""); 
     clock_t begin = clock();
-
-    setlocale(LC_ALL, "");
-    
+   
     //Open dictionary
     FILE *fp;
-    fp = OpenFile(argv[1]);
+    fp = OpenDictionary(argv[1]);
 
     //Initialize table for Keys and Words
     HashTable KeysTable = InitializeKeysTable(KEYS_TABLE_SIZE);
@@ -113,16 +130,15 @@ int main(int argc, char* argv[])
     //Read the dictionary, process word by word and insert them in WordsTable
     ProcessData(fp, KeysTable, WordsTable);
 
-    
-
-    //Close dictionary
-    CloseFile(fp);
+   UpdateDictionary(L"catty", fp, argv[1]);
 
     clock_t end = clock();
     double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
     printf("EXEC TIME: %f s\n", time_spent);
 
-    //PrintHashWordsTable(WordsTable);
+
+    //Close dictionary
+    CloseDictionary(fp);
 
     return 0;
 }
