@@ -360,7 +360,7 @@ void InsertT9Keys(HashTable T)
 /* Converts a string like "olá" to the corresponding sequence of integers(t9-keys). */
 unsigned long StringToIntAccordingT9Keys(wchar_t *word, HashTable KeysTable)
 {
-    unsigned int result = 0;
+    unsigned long result = 0;
 
     for(int i=0; i<wcslen(word); i++)
     {

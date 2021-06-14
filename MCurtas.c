@@ -18,7 +18,7 @@
 #include "hashtable_words.h"
 
 #define BUFFER_LENGTH 233
-#define WORDS_TABLE_SIZE 1000000
+#define WORDS_TABLE_SIZE 9000000
 #define KEYS_TABLE_SIZE 10
 
 //Open the dictionary via fileName passed as argument of the program
@@ -36,17 +36,17 @@ FILE *OpenDictionary(char *fileName)
 //Copies all words in fp to an updated dictionary and add the word passed as argument
 void UpdateDictionary(wchar_t *word, FILE *fp, char *fileName)
 {
-    printf("%ls\n", word);
     char ch;
     FILE *fp_updated;
-    fp_updated = fopen("updated.txt", "w");
+    fp = OpenDictionary(fileName);
+    fp_updated = fopen("output.txt", "w");
 
-
-    while( ( ch = fgetc(fp) ) != EOF )
+    while(( ch = fgetc(fp) ) != EOF)
       fputc(ch, fp_updated);
     
     fwrite(word, sizeof(wcslen(word)), 1, fp_updated );
 
+    fclose(fp);
     fclose(fp_updated);
     printf("Dictionary updated with word %ls\n", word);  
 }
@@ -63,21 +63,18 @@ void CloseDictionary(FILE *file)
 wchar_t *CleanWordProcess(wchar_t* word)
 {
     wchar_t *tmpWord = (wchar_t*)malloc(sizeof(wchar_t*)*wcslen(word));
+    
     //Clean word process
     for(int i=0 ; i<wcslen(word); i++)
     {
         //Remove '-' and '\''(apostrophe) from the word
         if('-' == word[i] || '\'' == word[i])
-        {
-            //printf("Finded '-' in word\n");
             break;  
-        }
+ 
         else
-        {
             tmpWord[i]= towlower(word[i]);
-        }
+
     }
-    //printf("Word after clean process: %ls\n", tmpWord);
     wchar_t *wordClean = (wchar_t*)malloc(sizeof(wchar_t*)*wcslen(tmpWord));
     wcscpy(wordClean, tmpWord);
     free(tmpWord);
@@ -102,6 +99,7 @@ void ProcessData(FILE *fp, HashTable KeysTable, HashTable WordsTable)
         tmpWord = wcscpy(tmpWord, buffer);
         cleanWord = CleanWordProcess(tmpWord);
         unsigned long res = StringToIntAccordingT9Keys(cleanWord, KeysTable);
+        //printf("%ld\n", res);
         InsertWord(tmpWord, res, WordsTable);
     }
 
@@ -130,7 +128,9 @@ int main(int argc, char* argv[])
     //Read the dictionary, process word by word and insert them in WordsTable
     ProcessData(fp, KeysTable, WordsTable);
 
-   UpdateDictionary(L"catty", fp, argv[1]);
+    UpdateDictionary(L"catty", fp, argv[1]);
+
+    //PrintHashWordsTable(WordsTable);
 
     clock_t end = clock();
     double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;

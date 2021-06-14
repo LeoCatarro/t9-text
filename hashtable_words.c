@@ -10,7 +10,6 @@
 #define MAX_LINE_SIZE 233
 
 #define MinTableSize (10)
-typedef unsigned int Index;
 typedef Position List;
 
 
@@ -42,22 +41,11 @@ static int NextPrime( int N ){
 }
 
 
-/* Hash function for ints */
-/*Index HashWords(const char *Key, int TableSize )
-{
-    unsigned int HashVal = 0;
-
-    while( *Key != '\0' )
-        HashVal += *Key++;
-   
-    return HashVal % TableSize;
-}*/
-unsigned int HashWords(long Key, int TableSize )
+long HashWords(unsigned long Key, int TableSize )
 {  
     return Key % TableSize;
 }
 
-/* Test hash function */
 
 /* Initialize the Table, 
 making the correspondent malloc() and allocate the array of lists and them Headers 
@@ -106,7 +94,6 @@ Position FindWord(wchar_t *Key, long wordinInt, HashTable H )
     {
         P = P->Next;
     }
-    //printf("[Info]: Finded Node with Element [%s]", P->Element);
     return P;
 }
 
@@ -119,9 +106,7 @@ void InsertWord(wchar_t *Key, long wordInInt, HashTable H ){
     //Key is not found
     if( Pos == NULL ){  
         NewCell = malloc( sizeof( struct ListNode ) );
-        //NewCell->Element = (wchar_t*)malloc(sizeof(Key));
         NewCell->Element = (wchar_t*)malloc(sizeof(wchar_t*)*wcslen(Key));
-        //printf("NewCell->Element size = %ld\n", wcslen(Key));
 
         if( NewCell == NULL )
             FatalError( "Out of space!!!" );
@@ -129,10 +114,8 @@ void InsertWord(wchar_t *Key, long wordInInt, HashTable H ){
         else{
             L = H->TheLists[ HashWords( wordInInt, H->TableSize ) ];
             NewCell->Next = L->Next;
-            //NewCell->Element = Key; 
             NewCell->Element = Key;
             L->Next = NewCell;
-            //printf("Inserted: %ls at index: %d\n", Key, HashWords( wordInInt, H->TableSize ));
         }
     }
 
@@ -149,13 +132,10 @@ void InsertWord(wchar_t *Key, long wordInInt, HashTable H ){
             //If the key is found in HT, we need to create another node 
             //to insert the element inside the list of the current hashtable position
             NewCell = malloc( sizeof( struct ListNode ) );
-            //NewCell->Element = (wchar_t*)malloc(sizeof(Key));
             NewCell->Element = (wchar_t*)malloc(sizeof(wchar_t*)*wcslen(Key));
-            printf("NewCell->Element size = %ld\n", wcslen(Key));
             Pos->Next = NewCell;
             NewCell->Element = Key;
             NewCell->Next = NULL;
-            //printf("Inserted: %ls at index: %d\n", Key, HashWords( wordInInt, H->TableSize ));
         }
     }
 }
