@@ -303,6 +303,7 @@ void PrintHashKeysTable(HashTable T)
         /*else
             printf("%d\t[%s]\n", i, "--");*/
     }
+    printf("\n");
 }
 
 /* Inserts the T9 Keys and the characters for each key in hashtable */

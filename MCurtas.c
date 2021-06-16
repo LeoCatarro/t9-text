@@ -6,6 +6,10 @@
 //        - use char* to fwrite() in file
 //        - correct bug when try to insert multiple strings in updated dictionary
 
+// Notes for words frequency implementation:
+//        - add an integer/long in ListNode struct
+//        - change insert function in hashtable_words.c to insert with frequency if is frequency file
+
 #include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h>
@@ -190,7 +194,7 @@ int main(int argc, char* argv[])
     //Stops the clock and calculate the loading dictionary time
     clock_t end = clock();
     double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
-    printf("Loading Time: %f s\n", time_spent);
+    printf("Loading Time: %f s\n\n", time_spent);
 
     PrintHashKeysTable(KeysTable);  //Printing keys to users know them
 
