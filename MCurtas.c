@@ -40,9 +40,9 @@ FILE *OpenDictionary(char *fileName, char* wayToOpen)
 
 
 //Close the dictionary
-void CloseDictionary(FILE *file)
+void CloseDictionary(FILE *fp)
 {
-    fclose(file);
+    fclose(fp);
 }
 
 
@@ -174,30 +174,25 @@ void InsertWordToMessageAndUpdateDict(wchar_t *phrase, FILE *fp, char* fileName)
 int main(int argc, char* argv[])
 {  
    
-    clock_t begin = clock();
-    setlocale(LC_ALL, ""); 
-   
-    //Open dictionary
     FILE *fp;
+    int res;
+    wchar_t phrase[BUFFER_LENGTH];  //Array to save the accepted suggested words
+    setlocale(LC_ALL, ""); 
+    clock_t begin = clock();
     fp = OpenDictionary(argv[1], "rb");
 
-    //Initialize table for Keys and Words
     HashTable KeysTable = InitializeKeysTable(KEYS_TABLE_SIZE);
     HashTable WordsTable = InitializeWordsTable(WORDS_TABLE_SIZE);
 
     //Read the dictionary, process word by word and insert them in WordsTable
     ProcessData(fp, KeysTable, WordsTable);
 
+    //Stops the clock and calculate the loading dictionary time
     clock_t end = clock();
     double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
-    printf("EXEC TIME: %f s\n", time_spent);
+    printf("Loading Time: %f s\n", time_spent);
 
-    //Print keys to user know them
-    PrintHashKeysTable(KeysTable);
-
-    //Words sugggestions
-    wchar_t phrase[BUFFER_LENGTH];      //Array to save the accepted suggested words
-    int res;
+    PrintHashKeysTable(KeysTable);  //Printing keys to users know them
 
     //Pogram menu
     printf("** Escreva a sua mensagem **\n");
@@ -207,11 +202,11 @@ int main(int argc, char* argv[])
 
         switch(res)
         {
-            long p;
             List L;
             Position P;
             char c;
-     
+
+            //Ask if user wants to leave the application
             case 0:
                 printf("Deseja sair da aplicação (s/n)? ");
                 scanf(" %c", &c);
@@ -221,23 +216,21 @@ int main(int argc, char* argv[])
 
                 break;
             
-
+            //Write the message and exit the progam
             case 1:
                 printf("Mensagem: %ls", phrase);
                 exit(1);
                 break;
             
-
+            //Users inserts a word
             default:
-                p = HashWords(res, WordsTable->TableSize);
-                L = WordsTable->TheLists[p];
+                L = WordsTable->TheLists[HashWords(res, WordsTable->TableSize)];
                 P = L->Next;
 
-                //If the word doenst exists, user will type the word and it will be insert in the current message and the dictionary updated
+                //Check ifthe word does not exists, 
+                //user will type the word and it will be insert in the current message and the dictionary updated
                 if(P == NULL)
-                {
                     InsertWordToMessageAndUpdateDict(phrase, fp, argv[1]);
-                }
 
                 else
                 {
@@ -266,9 +259,7 @@ int main(int argc, char* argv[])
                 break;
         }
     }
-
     //Close dictionary
     CloseDictionary(fp);
-
     return 0;
 }
