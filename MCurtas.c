@@ -47,7 +47,7 @@ void CloseDictionary(FILE *file)
 
 
 //Copies all words in fp to an updated dictionary and add the word passed as argument
-void UpdateDictionary(char *word, FILE *fp, char *fileName)
+void UpdateDictionary(wchar_t *word, FILE *fp, char *fileName)
 {
     char ch;
     FILE *fp_updated;
@@ -68,8 +68,8 @@ void UpdateDictionary(char *word, FILE *fp, char *fileName)
     }
 
     //Write the new word in the file
-    fputs("\n",fp_updated);
-    fputs(word, fp_updated);
+    fputws(L"\n",fp_updated);
+    fputws(word, fp_updated);
 
     //Close the file
     CloseDictionary(fp_updated);
@@ -179,9 +179,6 @@ int main(int argc, char* argv[])
 
     ProcessData(fp, KeysTable, WordsTable);
 
-    //UpdateDictionary("LEONARDO", fp, argv[1]);
-    //UpdateDictionary("catty", fp, argv[1]);
-
     PrintHashWordsTable(WordsTable);
 
     clock_t end = clock();
@@ -247,8 +244,9 @@ int main(int argc, char* argv[])
                     }
 
                     printf("Não existem mais sugestões; introduza a palavra do teclado\n");
-                    char *wordToInsert="";
-                    scanf("%s", wordToInsert);
+                    wchar_t wordToInsert[BUFFER_LENGTH];
+                    scanf("%ls", wordToInsert);
+                    wcscat(phrase, wordToInsert);
                     UpdateDictionary(wordToInsert, fp, argv[1]);
                 }    
                 break;
