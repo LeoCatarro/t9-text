@@ -4,6 +4,21 @@ typedef struct ListNode *Position;
 struct HashTbl;
 typedef struct HashTbl *HashTable;
 
+typedef Position List;
+
+
+struct ListNode{
+    wchar_t *Element;
+    Position Next;
+};
+
+
+struct HashTbl{
+    int TableSize;
+    List *TheLists;
+};
+
+
 HashTable InitializeWordsTable( int TableSize );
 void DestroyWordsTable( HashTable H );
 

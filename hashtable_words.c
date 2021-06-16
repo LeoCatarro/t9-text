@@ -1,28 +1,29 @@
-#include "fatal.h"
-#include "hashtable_words.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
 #include <wchar.h>
 
+#include "fatal.h"
+#include "hashtable_words.h"
+
 
 #define MAX_LINE_SIZE 233
 
 #define MinTableSize (10)
-typedef Position List;
+/*typedef Position List;
 
 
-struct ListNode{
+typedef struct ListNode{
     wchar_t *Element;
     Position Next;
-};
+}ListNode;
 
 
-struct HashTbl{
+typedef struct HashTbl{
     int TableSize;
     List *TheLists;
-};
+}HashTbl;*/
 
 
 /* Return next prime; assume N >= MinTableSize */
@@ -139,6 +140,7 @@ void InsertWord(wchar_t *Key, long wordInInt, HashTable H ){
         }
     }
 }
+
 
 /* Print the Element in Node P */
 wchar_t* RetrieveWord( Position P ){

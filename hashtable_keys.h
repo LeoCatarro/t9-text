@@ -7,6 +7,8 @@ typedef struct ListNode *Position;
 struct HashTbl;
 typedef struct HashTbl *HashTable;
 
+long HashWords(unsigned long Key, int TableSize );
+
 HashTable InitializeKeysTable( int TableSize );
 void DestroyKeysTable( HashTable H );
 
