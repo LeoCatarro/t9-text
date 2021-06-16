@@ -9,22 +9,7 @@
 
 
 #define MAX_LINE_SIZE 233
-
 #define MinTableSize (10)
-/*typedef Position List;
-
-
-typedef struct ListNode{
-    wchar_t *Element;
-    Position Next;
-}ListNode;
-
-
-typedef struct HashTbl{
-    int TableSize;
-    List *TheLists;
-}HashTbl;*/
-
 
 /* Return next prime; assume N >= MinTableSize */
 static int NextPrime( int N ){
@@ -99,8 +84,34 @@ Position FindWord(wchar_t *Key, long wordinInt, HashTable H )
 }
 
 
+//Function to sort in descending order
+//Source: https://stackoverflow.com/questions/35914574/sorting-linked-list-simplest-way
+void SortLinkedList(List L)
+    {
+    Position node=L->Next, temp = NULL;
+    long tempvar;//temp variable to store node WordFreq
+   
+    while(node != NULL)
+    {
+        temp=node; 
+        while (temp->Next !=NULL)//travel till the second last element 
+        {
+           if(temp->WordFreq < temp->Next->WordFreq)// compare the WordFreq of the nodes 
+            {
+              tempvar = temp->WordFreq;
+              temp->WordFreq = temp->Next->WordFreq;// swap the WordFreq
+              temp->Next->WordFreq = tempvar;
+            }
+         temp = temp->Next;    // move to the next element 
+        }
+        node = node->Next;    // move to the next node
+    }
+}
+
+
 /* Insert the Element Key passed as argument in HashTable H */
-void InsertWord(wchar_t *Key, long wordInInt, HashTable H ){
+void InsertWord(wchar_t *Key, long wordInInt, HashTable H )
+{
     Position Pos, NewCell;
     List L;
     Pos = FindWord( Key, wordInInt, H );
@@ -124,25 +135,49 @@ void InsertWord(wchar_t *Key, long wordInInt, HashTable H ){
     else
     {   
         //If the word is already in the HashTable, we dont want to repeat it
-        if(wcscmp(Pos->Element, Key) == 0)
-        {
-            return;
-        }
-        else
-        {
-            //If the key is found in HT, we need to create another node 
-            //to insert the element inside the list of the current hashtable position
-            NewCell = malloc( sizeof( struct ListNode ) );
-            NewCell->Element = (wchar_t*)malloc(sizeof(wchar_t*)*wcslen(Key));
-            Pos->Next = NewCell;
-            NewCell->Element = Key;
-            NewCell->Next = NULL;
-        }
+        return;
     }
 }
 
 
-/* Print the Element in Node P */
+//Insert the word passed but ordered by them frequency
+void InsertWordAccordingFrequency(wchar_t * Key, long wordFreq, long wordInInt, HashTable H )
+{
+    Position Pos, NewCell;
+    List L;
+    Pos = FindWord( Key, wordInInt, H );
+
+    //Key is not found
+    if( Pos == NULL ){  
+        printf("KEY NOT FOUND\n");
+        NewCell = malloc( sizeof( struct ListNode ) );
+        NewCell->Element = (wchar_t*)malloc(sizeof(wchar_t*)*wcslen(Key));
+
+        if( NewCell == NULL )
+            FatalError( "Out of space!!!" );
+           
+        else{
+            L = H->TheLists[ HashWords( wordInInt, H->TableSize ) ];
+            NewCell->Next = L->Next;
+            NewCell->Element = Key;
+            NewCell->WordFreq = wordFreq;
+            L->Next = NewCell;
+
+            SortLinkedList(L);
+        }
+    }
+
+    //Key is found in HashTable
+    else
+    {   
+        //If the word is already in the HashTable, we dont want to repeat it
+        printf("KEY FOUND\n");
+        return;
+    }
+}
+
+
+//Print the Element in Node P
 wchar_t* RetrieveWord( Position P ){
     return P->Element;
 }
@@ -247,6 +282,7 @@ void PrintHashWordsTable(HashTable T)
                 P->Element[wcslen(P->Element)+1] = 0;
                 printf("%ls", P->Element);
                 printf(" %ld", wcslen(P->Element));
+                printf(" %ld", P->WordFreq);
                 P = P->Next;
 
                 //If is not the last element

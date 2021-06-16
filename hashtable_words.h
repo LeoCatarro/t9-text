@@ -9,6 +9,7 @@ typedef Position List;
 
 struct ListNode{
     wchar_t *Element;
+    long WordFreq;
     Position Next;
 };
 
@@ -21,11 +22,12 @@ struct HashTbl{
 
 HashTable InitializeWordsTable( int TableSize );
 void DestroyWordsTable( HashTable H );
-
 Position FindWord(wchar_t * Key, long wordInInt, HashTable H );
 void InsertWord(wchar_t * Key, long wordInInt, HashTable H );
+void InsertWordAccordingFrequency(wchar_t * Key, long wordFreq, long wordInInt, HashTable H );
 wchar_t* RetrieveWord( Position P );
 void PrintHashWordsTable(HashTable T);
-
 HashTable DeleteWord(wchar_t * X, long wordInInt, HashTable T );
 HashTable MakeEmpty( HashTable T );
+
+Position FindPrevious(Position P, List L );

@@ -1,7 +1,4 @@
-ola
-olá
-eu
-sou
-o
-Leonardo
-adeus
+word,count
+olà,100
+olá,10
+adeus,100

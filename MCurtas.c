@@ -119,41 +119,38 @@ void ProcessData(FILE *fp, HashTable KeysTable, HashTable WordsTable)
 
     if(wcsstr(buffer, L",") != 0)
     {
-        
-
         printf("Is a frequency file!\n");
 
         while(fwscanf(fp,L"%ls", buffer) != EOF)
         {
             wchar_t* bufferAux;
-            wchar_t *word;
-            word = wcstok(buffer, L",", &bufferAux);
-            wchar_t *wordFreq;
-            wordFreq = wcstok(NULL, L",", &bufferAux);
-
+            wchar_t *word = wcstok(buffer, L",", &bufferAux);
+            wchar_t *wordFreq = wcstok(NULL, L",", &bufferAux);
             long freq = wcstol(wordFreq, NULL, 10);
 
             printf("Word: %ls\n", word);
             printf("Freq: %ld\n", freq);
-
-        }
-        /*while(fwscanf(fp,L"%ls", buffer) != EOF)
-        {
-            wchar_t *outBuff;
-            wchar_t *ptr = wcstok(buffer, L",", &outBuff);
-
-            	while(outBuff != NULL)
-                {
-                    printf("'%s'\n", ptr);
-                    ptr = strtok(NULL, ",");
-                }
-
             tmpWord = (wchar_t*)malloc(sizeof(wchar_t*)*wcslen(buffer));
             tmpWord = wcscpy(tmpWord, buffer);
             cleanWord = CleanWordProcess(tmpWord);
             unsigned long res = StringToIntAccordingT9Keys(cleanWord, KeysTable);
-            InsertWithFreq(tmpWord, res, WordsTable);
-        }*/
+            InsertWordAccordingFrequency(tmpWord, freq, res, WordsTable);
+        }
+
+        /*fwscanf(fp,L"%ls", buffer);
+        wchar_t* bufferAux;
+        wchar_t *word = wcstok(buffer, L",", &bufferAux);
+        wchar_t *wordFreq = wcstok(NULL, L",", &bufferAux);
+        long freq = wcstol(wordFreq, NULL, 10);
+
+        printf("Word: %ls\n", word);
+        printf("Freq: %ld\n", freq);
+        tmpWord = (wchar_t*)malloc(sizeof(wchar_t*)*wcslen(buffer));
+        tmpWord = wcscpy(tmpWord, buffer);
+        cleanWord = CleanWordProcess(tmpWord);
+        unsigned long res = StringToIntAccordingT9Keys(cleanWord, KeysTable);
+        InsertWordAccordingFrequency(tmpWord, freq, res, WordsTable);*/
+        
     }
 
     else
@@ -217,6 +214,8 @@ int main(int argc, char* argv[])
     printf("Loading Time: %f s\n\n", time_spent);
 
     PrintHashKeysTable(KeysTable);  //Printing keys to users know them
+
+    PrintHashWordsTable(WordsTable);
 
     //Pogram menu
     printf("** Escreva a sua mensagem **\n");
