@@ -119,44 +119,35 @@ void ProcessData(FILE *fp, HashTable KeysTable, HashTable WordsTable)
 
     if(wcsstr(buffer, L",") != 0)
     {
-        printf("Is a frequency file!\n");
+        //printf("Is a frequency file!\n");
+        wchar_t *wordFreq;
 
         while(fwscanf(fp,L"%ls", buffer) != EOF)
         {
             wchar_t* bufferAux;
             wchar_t *word = wcstok(buffer, L",", &bufferAux);
-            wchar_t *wordFreq = wcstok(NULL, L",", &bufferAux);
+            wordFreq = wcstok(NULL, L",", &bufferAux);
             long freq = wcstol(wordFreq, NULL, 10);
 
-            printf("Word: %ls\n", word);
-            printf("Freq: %ld\n", freq);
             tmpWord = (wchar_t*)malloc(sizeof(wchar_t*)*wcslen(buffer));
-            tmpWord = wcscpy(tmpWord, buffer);
+            tmpWord = wcscpy(tmpWord, word);
             cleanWord = CleanWordProcess(tmpWord);
             unsigned long res = StringToIntAccordingT9Keys(cleanWord, KeysTable);
             InsertWordAccordingFrequency(tmpWord, freq, res, WordsTable);
         }
-
-        /*fwscanf(fp,L"%ls", buffer);
-        wchar_t* bufferAux;
-        wchar_t *word = wcstok(buffer, L",", &bufferAux);
-        wchar_t *wordFreq = wcstok(NULL, L",", &bufferAux);
         long freq = wcstol(wordFreq, NULL, 10);
 
-        printf("Word: %ls\n", word);
-        printf("Freq: %ld\n", freq);
         tmpWord = (wchar_t*)malloc(sizeof(wchar_t*)*wcslen(buffer));
         tmpWord = wcscpy(tmpWord, buffer);
         cleanWord = CleanWordProcess(tmpWord);
         unsigned long res = StringToIntAccordingT9Keys(cleanWord, KeysTable);
-        InsertWordAccordingFrequency(tmpWord, freq, res, WordsTable);*/
-        
+        InsertWordAccordingFrequency(tmpWord, freq, res, WordsTable);
     }
 
     else
     {
-        fseek(fp, 0, SEEK_SET);
-        printf("Is not a frequency file\n");
+        fseek(fp, 0, SEEK_SET); //Sets again the pointer to the start of the file
+        //printf("Is not a frequency file\n");
 
         while(fwscanf(fp,L"%ls", buffer) != EOF)
         {
@@ -167,6 +158,7 @@ void ProcessData(FILE *fp, HashTable KeysTable, HashTable WordsTable)
             InsertWord(tmpWord, res, WordsTable);
         }
 
+        //Repeat again the read process to read the last word in the file
         fwscanf(fp,L"%ls", buffer);
         tmpWord = (wchar_t*)malloc(sizeof(wchar_t*)*wcslen(buffer));
         tmpWord = wcscpy(tmpWord, buffer);
