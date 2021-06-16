@@ -160,6 +160,17 @@ void ProcessData(FILE *fp, HashTable KeysTable, HashTable WordsTable)
 }
 
 
+//Scans the word that doesnt exists and insert it in the current phrase and updated the dictionary
+void InsertWordToMessageAndUpdateDict(wchar_t *phrase, FILE *fp, char* fileName)
+{
+    wchar_t wordToInsert[BUFFER_LENGTH];
+    printf("Não existem mais sugestões; introduza a palavra do teclado\n");
+    scanf("%ls", wordToInsert);
+    wcscat(phrase, wordToInsert);
+    UpdateDictionary(wordToInsert, fp, fileName);
+}
+
+
 int main(int argc, char* argv[])
 {  
    
@@ -223,32 +234,36 @@ int main(int argc, char* argv[])
                 L = WordsTable->TheLists[p];
                 P = L->Next;
 
-                printf("Sugestão: %ls, aceita(s/n)? ", P->Element);
-                scanf(" %c", &c);
-
-                //If the user accepts the suggestion, the word is inserted to the message
-                if('s' == c)
+                //If the word doenst exists, user will type the word and it will be insert in the current message and the dictionary updated
+                if(P == NULL)
                 {
-                    wcscat(phrase, L" ");
-                    wcscat(phrase, P->Element);
+                    InsertWordToMessageAndUpdateDict(phrase, fp, argv[1]);
                 }
 
-                //If the user dont accept it, suggest the next one until he accepts one or insert if dont have more words to suggest
                 else
                 {
-                    while(P->Next!=NULL && 'n' == c)
+                    printf("Sugestão: %ls, aceita(s/n)? ", P->Element);
+                    scanf(" %c", &c);
+
+                    //If the user accepts the suggestion, the word is inserted to the message
+                    if('s' == c)
                     {
-                        P = P->Next;
-                        printf("Sugestão: %ls, aceita(s/n)? ", P->Element);
-                        scanf(" %c", &c);
+                        wcscat(phrase, L" ");
+                        wcscat(phrase, P->Element);
                     }
 
-                    printf("Não existem mais sugestões; introduza a palavra do teclado\n");
-                    wchar_t wordToInsert[BUFFER_LENGTH];
-                    scanf("%ls", wordToInsert);
-                    wcscat(phrase, wordToInsert);
-                    UpdateDictionary(wordToInsert, fp, argv[1]);
-                }    
+                    //If the user dont accept it, suggest the next one until he accepts one or insert if dont have more words to suggest
+                    else if('n' == c)
+                    {
+                        while(P->Next!=NULL && 'n' == c)
+                        {
+                            P = P->Next;
+                            printf("Sugestão: %ls, aceita(s/n)? ", P->Element);
+                            scanf(" %c", &c);
+                        }
+                        InsertWordToMessageAndUpdateDict(phrase, fp, argv[1]);
+                    } 
+                }
                 break;
         }
     }
