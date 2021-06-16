@@ -115,11 +115,29 @@ void ProcessData(FILE *fp, HashTable KeysTable, HashTable WordsTable)
     wchar_t *cleanWord;
 
     //Verification if the files contains word's usage frequency
-    /*fwscanf(fp,L"%ls", buffer);
+    fwscanf(fp,L"%ls", buffer);
+
     if(wcsstr(buffer, L",") != 0)
     {
+        
+
         printf("Is a frequency file!\n");
+
         while(fwscanf(fp,L"%ls", buffer) != EOF)
+        {
+            wchar_t* bufferAux;
+            wchar_t *word;
+            word = wcstok(buffer, L",", &bufferAux);
+            wchar_t *wordFreq;
+            wordFreq = wcstok(NULL, L",", &bufferAux);
+
+            long freq = wcstol(wordFreq, NULL, 10);
+
+            printf("Word: %ls\n", word);
+            printf("Freq: %ld\n", freq);
+
+        }
+        /*while(fwscanf(fp,L"%ls", buffer) != EOF)
         {
             wchar_t *outBuff;
             wchar_t *ptr = wcstok(buffer, L",", &outBuff);
@@ -134,11 +152,13 @@ void ProcessData(FILE *fp, HashTable KeysTable, HashTable WordsTable)
             tmpWord = wcscpy(tmpWord, buffer);
             cleanWord = CleanWordProcess(tmpWord);
             unsigned long res = StringToIntAccordingT9Keys(cleanWord, KeysTable);
-            //InsertWordWithFrequency(tmpWord, res, WordsTable);
-        }
-    }*/
-    //else
-    //{
+            InsertWithFreq(tmpWord, res, WordsTable);
+        }*/
+    }
+
+    else
+    {
+        fseek(fp, 0, SEEK_SET);
         printf("Is not a frequency file\n");
 
         while(fwscanf(fp,L"%ls", buffer) != EOF)
@@ -156,7 +176,7 @@ void ProcessData(FILE *fp, HashTable KeysTable, HashTable WordsTable)
         cleanWord = CleanWordProcess(tmpWord);
         unsigned long res = StringToIntAccordingT9Keys(cleanWord, KeysTable);
         InsertWord(tmpWord, res, WordsTable);
-    //}
+    }
 
     free(tmpWord);
     free(cleanWord);
