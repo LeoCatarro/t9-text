@@ -26,7 +26,7 @@
 #define WORDS_TABLE_SIZE 9000000
 #define KEYS_TABLE_SIZE 10
 
-//Open the dictionary via fileName passed as argument of the program
+//Open the dictionary via fileName passed as argument of the program, if the dictionary is inside the dictionaries folder
 FILE *OpenDictionary(char *fileName, char* wayToOpen)
 {
     FILE *fp;
@@ -186,15 +186,14 @@ int main(int argc, char* argv[])
     HashTable WordsTable = InitializeWordsTable(WORDS_TABLE_SIZE);
 
     //Read the dictionary, process word by word and insert them in WordsTable
-    
-
     ProcessData(fp, KeysTable, WordsTable);
-
-    PrintHashWordsTable(WordsTable);
 
     clock_t end = clock();
     double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
     printf("EXEC TIME: %f s\n", time_spent);
+
+    //Print keys to user know them
+    PrintHashKeysTable(KeysTable);
 
     //Words sugggestions
     wchar_t phrase[BUFFER_LENGTH];      //Array to save the accepted suggested words

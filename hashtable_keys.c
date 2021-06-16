@@ -288,17 +288,17 @@ void PrintHashKeysTable(HashTable T)
 
         if(P != NULL)
         {
-            printf("%d\t[", i);
+            printf("%d:\t", i);
             while(P != NULL)
             {
-                printf("%lc", P->Element);
+                printf("%lc ", P->Element);
                 P = P->Next;
 
                 //If is not the last element
-                if(P != NULL)
-                    printf(", ");
+                /*if(P != NULL)
+                    printf(", ");*/
             }
-            printf("]\n");
+            printf("\n");
         }
         /*else
             printf("%d\t[%s]\n", i, "--");*/
