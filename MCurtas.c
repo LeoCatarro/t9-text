@@ -135,8 +135,9 @@ void ProcessData(FILE *fp, HashTable KeysTable, HashTable WordsTable)
             unsigned long res = StringToIntAccordingT9Keys(cleanWord, KeysTable);
             InsertWordAccordingFrequency(tmpWord, freq, res, WordsTable);
         }
-        long freq = wcstol(wordFreq, NULL, 10);
 
+        //Repeat the process to read the last line of the file
+        long freq = wcstol(wordFreq, NULL, 10);
         tmpWord = (wchar_t*)malloc(sizeof(wchar_t*)*wcslen(buffer));
         tmpWord = wcscpy(tmpWord, buffer);
         cleanWord = CleanWordProcess(tmpWord);
