@@ -208,7 +208,7 @@ int main(int argc, char* argv[])
 
     PrintHashKeysTable(KeysTable);  //Printing keys to users know them
 
-    PrintHashWordsTable(WordsTable);
+    //PrintHashWordsTable(WordsTable);
 
     //Pogram menu
     printf("** Escreva a sua mensagem **\n");
