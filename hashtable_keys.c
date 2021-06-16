@@ -310,52 +310,62 @@ void PrintHashKeysTable(HashTable T)
 void InsertT9Keys(HashTable T)
 {
     //Key 2
-    InsertNthKey(L'á', 2, T);
-    InsertNthKey(L'a', 2, T);
-    InsertNthKey(L'b', 2, T);
-    InsertNthKey(L'c', 2, T);
-    InsertNthKey(L'á', 2, T);
-    InsertNthKey(L'à', 2, T);
-    InsertNthKey(L'â', 2, T);
-    InsertNthKey(L'ã', 2, T);
     InsertNthKey(L'ç', 2, T);
+    InsertNthKey(L'ã', 2, T);
+    InsertNthKey(L'â', 2, T);
+    InsertNthKey(L'à', 2, T);
+    InsertNthKey(L'á', 2, T);
+    InsertNthKey(L'c', 2, T);
+    InsertNthKey(L'b', 2, T);
+    InsertNthKey(L'a', 2, T);
+
     //Key 3
-    InsertNthKey(L'd', 3, T);
-    InsertNthKey(L'e', 3, T);
-    InsertNthKey(L'f', 3, T);
-    InsertNthKey(L'é', 3, T);
     InsertNthKey(L'ê', 3, T);
+    InsertNthKey(L'é', 3, T);
+    InsertNthKey(L'f', 3, T);
+    InsertNthKey(L'e', 3, T);
+    InsertNthKey(L'd', 3, T);
+
     //Key 4
-    InsertNthKey(L'g', 4, T);
-    InsertNthKey(L'h', 4, T);
-    InsertNthKey(L'i', 4, T);
     InsertNthKey(L'í', 4, T);
+    InsertNthKey(L'i', 4, T);
+    InsertNthKey(L'h', 4, T);
+    InsertNthKey(L'g', 4, T);
+
     //Key 5
-    InsertNthKey(L'j', 5, T);
-    InsertNthKey(L'k', 5, T);
     InsertNthKey(L'l', 5, T);
+    InsertNthKey(L'k', 5, T);
+    InsertNthKey(L'j', 5, T);
+
     //Key 6
-    InsertNthKey(L'm', 6, T);
-    InsertNthKey(L'n', 6, T);
-    InsertNthKey(L'o', 6, T);
-    InsertNthKey(L'ó', 6, T);
-    InsertNthKey(L'ô', 6, T);
     InsertNthKey(L'õ', 6, T);
+    InsertNthKey(L'ô', 6, T);
+    InsertNthKey(L'ó', 6, T);
+    InsertNthKey(L'o', 6, T);
+    InsertNthKey(L'n', 6, T);
+    InsertNthKey(L'm', 6, T);
+
     //Key 7
-    InsertNthKey(L'p', 7, T);
-    InsertNthKey(L'q', 7, T);
-    InsertNthKey(L'r', 7, T);
+     
     InsertNthKey(L's', 7, T);
+    InsertNthKey(L'r', 7, T);
+    InsertNthKey(L'q', 7, T);
+    InsertNthKey(L'p', 7, T);
+
     //Key 8
-    InsertNthKey(L't', 8, T);
-    InsertNthKey(L'u', 8, T);
-    InsertNthKey(L'v', 8, T);
     InsertNthKey(L'ú', 8, T);
+    InsertNthKey(L'v', 8, T);
+    InsertNthKey(L'u', 8, T);
+    InsertNthKey(L't', 8, T);
+    
     //Key 9
-    InsertNthKey(L'w', 9, T);
-    InsertNthKey(L'x', 9, T);
-    InsertNthKey(L'y', 9, T);
     InsertNthKey(L'z', 9, T);
+    InsertNthKey(L'y', 9, T);
+    InsertNthKey(L'x', 9, T);
+    InsertNthKey(L'w', 9, T);
+    
+    
+    
 }
 
 /* Converts a string like "olá" to the corresponding sequence of integers(t9-keys). */
