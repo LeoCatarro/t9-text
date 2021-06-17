@@ -57,7 +57,7 @@ void CloseDictionary(FILE *fp)
 
 /*
 * Function: UpdateDictionary
-* -------------------
+* --------------------------
 * copy the contente of file source to file destination and insert the word passed as argument in destination file
 *
 * source: current file
@@ -111,7 +111,7 @@ void UpdateDictionary(char* source, char* destination, wchar_t* word)
 
 /*
 * Function: CleanWordProcess
-* -------------------
+* --------------------------
 * processes the passed word, converting it to lowercase, and "remove" '-' or '\''
 *
 * word: word to be processed and cleaned
@@ -142,7 +142,7 @@ wchar_t *CleanWordProcess(wchar_t* word)
 
 /*
 * Function: ProcessData
-* -------------------
+* ---------------------
 * inserts the keys into KeysTable
 * read the lines from the file and insert them into WordsTable, after line been processed and word cleaned!
 *
@@ -221,7 +221,7 @@ void ProcessData(FILE *fp, HashTable KeysTable, HashTable WordsTable)
 
 /*
 * Function: InsertWordInHashAndPhrase
-* -------------------
+* -----------------------------------
 * scans the word that user typed, that doesnt exists 
 * insert it in the current phrase
 * updated the dictionary

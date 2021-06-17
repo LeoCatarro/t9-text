@@ -66,7 +66,7 @@ Index HashKeys( wchar_t Key, int TableSize ){
 
 /* 
 * Function: InitializeKeysTable
-* ------------------------------
+* -----------------------------
 * initialize the hashtable
 * making the correspondent malloc() and allocate the array of lists and them Headers to use on HashTable positions 
 *
@@ -110,7 +110,7 @@ HashTable InitializeKeysTable( int TableSize ){
 
 /*
 * Function: FindKey
-* ------------------
+* -----------------
 * finds a key inside an hashtable 
 *
 * Key: key to be finded
@@ -138,7 +138,7 @@ int FindKey( wchar_t Key, HashTable H )
 
 /*
 * Function: FindNthKey
-* ------------------
+* --------------------
 *  Find the key in the given index 
 *
 * Key: key to be finded
@@ -161,7 +161,7 @@ Position FindNthKey(wchar_t Key, int Index, HashTable H )
 
 /*
 * Function: InserNthKey
-* -------------------
+* ---------------------
 * inserts the give Key in the give Index on hashtable H
 *
 * Key: word to be inserted
@@ -204,7 +204,7 @@ void InsertNthKey(wchar_t Key, int Index, HashTable H ){
 
 /*
 * Function: RetrieveKey
-* -------------------
+* ---------------------
 * print a key
 *
 * P: position of the key to be printed
@@ -218,7 +218,7 @@ wchar_t RetrieveKey( Position P ){
 
 /*
 * Function: DestroyKeysTable
-* ---------------------------
+* --------------------------
 * free the ram occupied from hashtable H
 *
 * H: hashtable
@@ -246,7 +246,7 @@ void DestroyKeysTable( HashTable H ){
 
 /*
 * Function: PrintHashKeysTable
-* -------------------
+* ----------------------------
 * show the hashtable and it content in terminal
 *
 * T: hashtable of keys
@@ -345,7 +345,7 @@ void InsertT9Keys(HashTable T)
 
 /*
 * Function: StringToIntAccordingT9Keys
-* ----------------------
+* ------------------------------------
 * converts word to the corresponding sequence of integers(t9-keys)
 *
 * word: word to be converted
