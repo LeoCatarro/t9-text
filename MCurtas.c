@@ -50,26 +50,18 @@ void CloseDictionary(FILE *fp)
 }
 
 
-//Copy the content of the file passed as src to dst
-void CopyDictionaryAndUpdated(char* source, char* destination, wchar_t* word)
+//Copy the content of the file passed as source to destination
+void UpdateDictionary(char* source, char* destination, wchar_t* word)
 {
-    // declaring file pointers
+    // declaring file pointers and local variables
+    char buf[100];
     FILE *fp1, *fp2;
  
     // opening files
-    fp1 = fopen(source, "a+");
-    fp2 = fopen(destination, "a+");
+    fp1 = OpenDictionary(source, "a+");
+    fp2 = OpenDictionary(destination, "a+");
  
-    // If file is not found then return.
-    /*if (!fp1 && !fp2) {
-        printf("Unable to open/""detect file(s)\n");
-        return;
-    }*/
- 
-    char buf[100];
- 
-    // writing the contents of
-    // source file to destination file.    
+    
     //Copy all lines to output file if the file is empty
     fseek (fp2, 0, SEEK_END);
     int size = ftell(fp2);
@@ -80,6 +72,8 @@ void CopyDictionaryAndUpdated(char* source, char* destination, wchar_t* word)
             fprintf(fp2, "%s", buf);
         }
     }
+
+    //Update dictionary with word passed as argument
     fwprintf(fp2, L"\n");
     fwprintf(fp2, L"%ls", word);
     rewind(fp2);
@@ -264,7 +258,7 @@ int main(int argc, char* argv[])
                     scanf("%ls", wordToInsert);
                     
                     wchar_t *inserted = InsertWordInHashAndPhrase(wordToInsert, phrase, WordsTable, KeysTable);
-                    CopyDictionaryAndUpdated(argv[1], "dict/output.txt", inserted);
+                    UpdateDictionary(argv[1], "output.txt", inserted);
                 }
                 else
                 {
@@ -292,7 +286,7 @@ int main(int argc, char* argv[])
                         scanf("%ls", wordToInsert);
 
                         wchar_t *inserted = InsertWordInHashAndPhrase(wordToInsert, phrase, WordsTable, KeysTable);
-                        CopyDictionaryAndUpdated(argv[1], "dict/output.txt", inserted);
+                        UpdateDictionary(argv[1], "output.txt", inserted);
                     } 
                 }
                 break;
