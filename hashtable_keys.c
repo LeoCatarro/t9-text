@@ -25,7 +25,15 @@ struct HashTbl{
 };
 
 
-/* Return next prime; assume N >= MinTableSize */
+/*
+* Function: NextPrime
+* -------------------
+* calculates the next prime number of a given number
+*
+* N: Tablesize
+*
+* Returns: the next prime number
+*/
 static int NextPrime( int N ){
     int i;
 
@@ -41,14 +49,31 @@ static int NextPrime( int N ){
 }
 
 
-/* Hash function for ints */
+/*
+* Function: HashKeys
+* -------------------
+* hash the given Key 
+*
+* Key: T9Key
+* TableSize: hashtable size
+*
+* Returns: an index of hashtable when it will be inserted the characters that T9Key represents
+*/
 Index HashKeys( wchar_t Key, int TableSize ){
     return Key % TableSize;
 }
 
-/* Initialize the Table, 
-making the correspondent malloc() and allocate the array of lists and them Headers 
-to use on HashTable positions */
+
+/* 
+* Function: InitializeKeysTable
+* ------------------------------
+* initialize the hashtable
+* making the correspondent malloc() and allocate the array of lists and them Headers to use on HashTable positions 
+*
+* TableSize: size of the initialized hashtable
+*
+* Returns: hashtable
+*/
 HashTable InitializeKeysTable( int TableSize ){
     HashTable H;
     int i;
@@ -83,8 +108,16 @@ HashTable InitializeKeysTable( int TableSize ){
 }
 
 
-/* Find a Key in HashTable */
-
+/*
+* Function: FindKey
+* ------------------
+* finds a key inside an hashtable 
+*
+* Key: key to be finded
+* H: hashtable to find Key
+*
+* Returns: index of the Key in Hashtable H
+*/
 int FindKey( wchar_t Key, HashTable H )
 {
     for(int i=0 ; i < H->TableSize ; i++)
@@ -103,7 +136,17 @@ int FindKey( wchar_t Key, HashTable H )
 }
 
 
-/* Find the key in the given index */
+/*
+* Function: FindNthKey
+* ------------------
+*  Find the key in the given index 
+*
+* Key: key to be finded
+* Index: index of hashtable
+* H: hashtable to find Key
+*
+* Returns: the Position of Key in Hashtable H
+*/
 Position FindNthKey(wchar_t Key, int Index, HashTable H )
 {
     List L = H->TheLists[Index];
@@ -116,7 +159,15 @@ Position FindNthKey(wchar_t Key, int Index, HashTable H )
 }
 
 
-/* Insert the Element Key passed as argument in HashTable H */
+/*
+* Function: InserNthKey
+* -------------------
+* inserts the give Key in the give Index on hashtable H
+*
+* Key: word to be inserted
+* Index: index to insert the Key
+* H: hashtable where it will be inserted the Key
+*/
 void InsertNthKey(wchar_t Key, int Index, HashTable H ){
     Position Pos, NewCell;
     List L;
@@ -151,49 +202,27 @@ void InsertNthKey(wchar_t Key, int Index, HashTable H ){
 }
 
 
-/* Insert the Element Key passed as argument in HashTable H */
 /*
-void Insert( ElementType Key, HashTable H ){
-    Position Pos, NewCell;
-    List L;
-
-    Pos = Find( Key, H );
-
-    //Key is not found
-    if( Pos == NULL ){  
-        NewCell = malloc( sizeof( struct ListNode ) );
-
-        if( NewCell == NULL )
-            FatalError( "Out of space!!!" );
-        
-        else{
-            L = H->TheLists[ Hash( Key, H->TableSize ) ];
-            NewCell->Next = L->Next;
-            NewCell->Element = Key; 
-            L->Next = NewCell;
-        }
-    }
-
-    //Key is found in HashTable
-    else
-    {   
-        //If the key is found in HT, we need to create another node 
-        //to insert the element inside the list of the current hashtable position
-        NewCell = malloc( sizeof( struct ListNode ) );
-        Pos->Next = NewCell;
-        NewCell->Element = Key;
-        NewCell->Next = NULL;
-    }
-}
+* Function: RetrieveKey
+* -------------------
+* print a key
+*
+* P: position of the key to be printed
+*
+* Returns: the key
 */
-
-/* Print the Element in Node P */
 wchar_t RetrieveKey( Position P ){
     return P->Element;
 }
 
 
-/* Free the ram occupied from HashTable */
+/*
+* Function: DestroyKeysTable
+* ---------------------------
+* free the ram occupied from hashtable H
+*
+* H: hashtable
+*/
 void DestroyKeysTable( HashTable H ){
     int i;
 
@@ -215,69 +244,13 @@ void DestroyKeysTable( HashTable H ){
 }
 
 
-/* Removes the Element X from the HashTable */
 /*
-HashTable Delete( ElementType X, HashTable T ){
-    
-    // Find the key of the Element X
-    int key = Hash(X, T->TableSize);
-
-    //Key finded
-    if(key != -1)
-    {
-        //If the key is finded we need to iterate over the List of that Key Hashtable Position to find the X
-        Position prevP = T->TheLists[key];
-        Position P = T->TheLists[key]->Next;
-
-        //X finded 
-        while(P != NULL)
-        {
-            if(P->Element == X && P->Next != NULL)
-            {   
-                printf("Deleted %d at index %d from HashTable\n", P->Element, key);
-                prevP->Next = P->Next->Next;
-                return T;
-            }
-
-            else if(P->Element == X && P->Next == NULL)
-            {
-                prevP->Next = NULL;
-                printf("Deleted %d at index %d from HashTable\n", P->Element, key);
-                return T;
-            }
-
-            prevP = P;
-            P = P->Next;       
-        }
-    }
-
-    //Key not finded 
-    else
-        FatalError("Element not present in HashTable");
-    
-    return T;
-}
+* Function: PrintHashKeysTable
+* -------------------
+* show the hashtable and it content in terminal
+*
+* T: hashtable of keys
 */
-
-
-/* Free the allocated memory of Hashtable */
-/*HashTable MakeEmpty( HashTable T ){
-    for(int i=0 ; i<T->TableSize; i++)
-    {
-        Position P = T->TheLists[i];
-        while(P->Next != NULL)
-        {
-            P = P->Next;
-            free(P);
-        }
-    }
-
-    printf("\nTODO()\n");
-    return T;
-}
-*/
-
-/* Display HashTable in Terminal */
 void PrintHashKeysTable(HashTable T)
 {
     printf("* Printing Keys HashTable *\n");
@@ -293,20 +266,21 @@ void PrintHashKeysTable(HashTable T)
             {
                 printf("%lc ", P->Element);
                 P = P->Next;
-
-                //If is not the last element
-                /*if(P != NULL)
-                    printf(", ");*/
             }
             printf("\n");
         }
-        /*else
-            printf("%d\t[%s]\n", i, "--");*/
     }
     printf("\n");
 }
 
-/* Inserts the T9 Keys and the characters for each key in hashtable */
+
+/*
+* Function: InsertT9Keys
+* ----------------------
+* inserts the T9 Keys and the characters for each key in hashtable
+*
+* T: Hashtable to save the T9Keys
+*/
 void InsertT9Keys(HashTable T)
 {
     //Key 2
@@ -368,7 +342,17 @@ void InsertT9Keys(HashTable T)
     
 }
 
-/* Converts a string like "olá" to the corresponding sequence of integers(t9-keys). */
+
+/*
+* Function: StringToIntAccordingT9Keys
+* ----------------------
+* converts word to the corresponding sequence of integers(t9-keys)
+*
+* word: word to be converted
+* KeysTable: Hashtable to save the T9Keys
+*
+* Returns: converted words to T9Keys
+*/
 unsigned long StringToIntAccordingT9Keys(wchar_t *word, HashTable KeysTable)
 {
     unsigned long result = 0;

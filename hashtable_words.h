@@ -1,11 +1,8 @@
 struct ListNode;
 typedef struct ListNode *Position;
-
 struct HashTbl;
 typedef struct HashTbl *HashTable;
-
 typedef Position List;
-
 
 struct ListNode{
     wchar_t *Element;
@@ -13,12 +10,10 @@ struct ListNode{
     Position Next;
 };
 
-
 struct HashTbl{
     int TableSize;
     List *TheLists;
 };
-
 
 HashTable InitializeWordsTable( int TableSize );
 void DestroyWordsTable( HashTable H );
@@ -28,6 +23,3 @@ void InsertWordAccordingFrequency(wchar_t * Key, long wordFreq, long wordInInt, 
 wchar_t* RetrieveWord( Position P );
 void PrintHashWordsTable(HashTable T);
 HashTable DeleteWord(wchar_t * X, long wordInInt, HashTable T );
-HashTable MakeEmpty( HashTable T );
-
-Position FindPrevious(Position P, List L );

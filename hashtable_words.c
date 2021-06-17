@@ -1,3 +1,5 @@
+//Source: https://stackoverflow.com/questions/35914574/sorting-linked-list-simplest-way
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -11,7 +13,16 @@
 #define MAX_LINE_SIZE 233
 #define MinTableSize (10)
 
-/* Return next prime; assume N >= MinTableSize */
+
+/*
+* Function: NextPrime
+* -------------------
+* calculates the next prime number of a given number
+*
+* N: Tablesize
+*
+* Returns: the next prime number
+*/
 static int NextPrime( int N ){
     int i;
 
@@ -27,15 +38,32 @@ static int NextPrime( int N ){
 }
 
 
+/*
+* Function: HashWords
+* -------------------
+* hash the given Key 
+*
+* Key: word as an integer
+* TableSize: hashtable size
+*
+* Returns: an index of hashtable when it will be inserted data after
+*/
 long HashWords(unsigned long Key, int TableSize )
 {  
     return Key % TableSize;
 }
 
 
-/* Initialize the Table, 
-making the correspondent malloc() and allocate the array of lists and them Headers 
-to use on HashTable positions */
+/* 
+* Function: Initialize the Table
+* ------------------------------
+* initialize the hashtable
+* making the correspondent malloc() and allocate the array of lists and them Headers to use on HashTable positions 
+*
+* TableSize: size of the initialized hashtable
+*
+* Returns: hashtable
+*/
 HashTable InitializeWordsTable( int TableSize ){
     HashTable H;
     int i;
@@ -70,7 +98,17 @@ HashTable InitializeWordsTable( int TableSize ){
 }
 
 
-/* Find a Key in HashTable */
+/*
+* Function: FindWord
+* ------------------
+* finds a word inside an hashtable 
+*
+* Key: word to be finded
+* wordInInt: integer Key equivalent(Key converted to T9Keys)
+* H: hashtable to find Key
+*
+* Returns: the Position of the Key in hashtable or NULL if its hasnt finded
+*/
 Position FindWord(wchar_t *Key, long wordinInt, HashTable H )
 {   
     List L = H->TheLists[HashWords( wordinInt, H->TableSize )];
@@ -84,22 +122,29 @@ Position FindWord(wchar_t *Key, long wordinInt, HashTable H )
 }
 
 
-//Function to sort in descending order
-//Source: https://stackoverflow.com/questions/35914574/sorting-linked-list-simplest-way
+/*
+* Function: SortLinkedList
+* ------------------------
+* sort the linked list passed as arguments by descending order
+*
+* L: linked list to be sorted
+*
+* Returns: L sorted by descending order
+*/
 void SortLinkedList(List L)
     {
     Position node=L->Next, temp = NULL;
-    long tempvar;//temp variable to store node WordFreq
+    long tempvar;   //temp variable to store node WordFreq
    
     while(node != NULL)
     {
         temp=node; 
-        while (temp->Next !=NULL)//travel till the second last element 
+        while (temp->Next !=NULL)   //travel till the second last element 
         {
-           if(temp->WordFreq < temp->Next->WordFreq)// compare the WordFreq of the nodes 
+           if(temp->WordFreq < temp->Next->WordFreq)    // compare the WordFreq of the nodes 
             {
               tempvar = temp->WordFreq;
-              temp->WordFreq = temp->Next->WordFreq;// swap the WordFreq
+              temp->WordFreq = temp->Next->WordFreq;    // swap the WordFreq
               temp->Next->WordFreq = tempvar;
             }
          temp = temp->Next;    // move to the next element 
@@ -109,7 +154,15 @@ void SortLinkedList(List L)
 }
 
 
-/* Insert the Element Key passed as argument in HashTable H */
+/*
+* Function: InsertWord
+* -------------------
+* inserts the give Key in hashtable H
+*
+* Key: word to be inserted
+* wordInInt: integer Key equivalent(Key converted to T9Keys)
+* H: hashtable where it will be inserted the Key
+*/
 void InsertWord(wchar_t *Key, long wordInInt, HashTable H )
 {
     Position Pos, NewCell;
@@ -140,7 +193,16 @@ void InsertWord(wchar_t *Key, long wordInInt, HashTable H )
 }
 
 
-//Insert the word passed but ordered by them frequency
+/*
+* Function: InserWordAccordingFrequency
+* -------------------
+* inserts the give Key in hashtable H according it usage frequency with SortLinkedList function help
+*
+* Key: word to be inserted
+* wordFreq: Key usage frequency
+* wordInInt: integer Key equivalent(Key converted to T9Keys)
+* H: hashtable where it will be inserted the Key
+*/
 void InsertWordAccordingFrequency(wchar_t * Key, long wordFreq, long wordInInt, HashTable H )
 {
     Position Pos, NewCell;
@@ -175,13 +237,27 @@ void InsertWordAccordingFrequency(wchar_t * Key, long wordFreq, long wordInInt, 
 }
 
 
-//Print the Element in Node P
+/*
+* Function: RetrieveWord
+* -------------------
+* print a word
+*
+* P: position of the word to be printed
+*
+* Returns: the word
+*/
 wchar_t* RetrieveWord( Position P ){
     return P->Element;
 }
 
 
-/* Free the ram occupied from HashTable */
+/*
+* Function: DestroyWordsTable
+* ---------------------------
+* free the ram occupied from hashtable H
+*
+* H: hashtable
+*/
 void DestroyWordsTable( HashTable H ){
     int i;
 
@@ -203,7 +279,17 @@ void DestroyWordsTable( HashTable H ){
 }
 
 
-/* Removes the Element X from the HashTable */
+/*
+* Function: DeleteWord
+* -------------------
+* removes the give word from HashTable
+*
+* X: word to be inserted
+* wordInInt: integer Key equivalent(Key converted to T9Keys)
+* H: hashtable where it will be inserted the Key
+*
+* Returns: the updated hashtable
+*/
 HashTable DeleteWord(wchar_t * X, long wordInInt, HashTable T ){
     
     // Find the key of the Element X
@@ -246,24 +332,13 @@ HashTable DeleteWord(wchar_t * X, long wordInInt, HashTable T ){
 }
 
 
-/* Free the allocated memory of Hashtable */
-HashTable MakeEmpty( HashTable T ){
-    /*for(int i=0 ; i<T->TableSize; i++)
-    {
-        Position P = T->TheLists[i];
-        while(P->Next != NULL)
-        {
-            P = P->Next;
-            free(P);
-        }
-    }*/
-
-    printf("\nTODO()\n");
-    return T;
-}
-
-
-/* Display HashTable in Terminal */
+/*
+* Function: PrintHashWordsTable
+* -------------------
+* show the hashtable and it content in terminal
+*
+* H: hashtable where it will be inserted the Key
+*/
 void PrintHashWordsTable(HashTable T)
 {
     printf("* Printing HashTable *\n");
