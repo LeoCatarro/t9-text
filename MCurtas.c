@@ -50,33 +50,40 @@ void CloseDictionary(FILE *fp)
 }
 
 
-//Copies all words in fp to an updated dictionary and add the word passed as argument
-void UpdateDictionary(wchar_t *word, FILE *fp, char *fileName)
+//Copy the content of the file passed as src to dst
+void CopyDictionaryAndUpdated(char* source, char* destination, wchar_t* word)
 {
-    char ch;
-    FILE *fp_updated;
-
-    fp = OpenDictionary(fileName, "r");
-    /*char filePath[BUFFER_LENGTH] = "dictionaries/";
-    printf("%s\n", filePath);*/
-    fp_updated = OpenDictionary("output.txt", "a+");
-
+    // declaring file pointers
+    FILE *fp1, *fp2;
+ 
+    // opening files
+    fp1 = fopen(source, "a+");
+    fp2 = fopen(destination, "a+");
+ 
+    // If file is not found then return.
+    /*if (!fp1 && !fp2) {
+        printf("Unable to open/""detect file(s)\n");
+        return;
+    }*/
+ 
+    char buf[100];
+ 
+    // writing the contents of
+    // source file to destination file.    
     //Copy all lines to output file if the file is empty
-    fseek (fp_updated, 0, SEEK_END);
-    int size = ftell(fp_updated);
+    fseek (fp2, 0, SEEK_END);
+    int size = ftell(fp2);
 
     if (0 == size) {
-        while(( ch = fgetc(fp) ) != EOF)
-            fputc(ch, fp_updated);
+        while (!feof(fp1)) {
+            fgets(buf, sizeof(buf), fp1);
+            fprintf(fp2, "%s", buf);
+        }
     }
-
-    //Write the new word in the file
-    fputws(L"\n",fp_updated);
-    fputws(word, fp_updated);
-    CloseDictionary(fp_updated);    //Close the file
-    return;   
+    fwprintf(fp2, L"\n");
+    fwprintf(fp2, L"%ls", word);
+    rewind(fp2);
 }
-
 
 
 //Processes the file readed word, converting it to lowercase, and "remove" '-' or '\''
@@ -173,13 +180,23 @@ void ProcessData(FILE *fp, HashTable KeysTable, HashTable WordsTable)
 
 
 //Scans the word that doesnt exists and insert it in the current phrase and updated the dictionary
-void InsertWordToMessageAndUpdateDict(wchar_t *phrase, FILE *fp, char* fileName)
+wchar_t *InsertWordInHashAndPhrase(wchar_t *wordToInsert, wchar_t *phrase, HashTable WordsTable, HashTable KeysTable)
 {
-    wchar_t wordToInsert[BUFFER_LENGTH];
-    printf("Não existem mais sugestões; introduza a palavra do teclado\n");
-    scanf("%ls", wordToInsert);
+    wchar_t *tmpWord;
+    wchar_t *cleanWord;
+    
+    //Append the word to current phrase
     wcscat(phrase, wordToInsert);
-    UpdateDictionary(wordToInsert, fp, fileName);
+    wcscat(phrase, L" ");
+
+    //Clean the word to insert it in the WordsTable
+    tmpWord = (wchar_t*)malloc(sizeof(wchar_t*)*wcslen(wordToInsert));
+    tmpWord = wcscpy(tmpWord, wordToInsert);
+    cleanWord = CleanWordProcess(tmpWord);
+    unsigned long res = StringToIntAccordingT9Keys(cleanWord, KeysTable);
+    InsertWord(wordToInsert, res, WordsTable);
+
+    return wordToInsert;
 }
 
 
@@ -190,7 +207,7 @@ int main(int argc, char* argv[])
     wchar_t phrase[BUFFER_LENGTH];  //Array to save the accepted suggested words
     setlocale(LC_ALL, ""); 
     clock_t begin = clock();
-    fp = OpenDictionary(argv[1], "rb");
+    fp = OpenDictionary(argv[1], "a+");
 
     HashTable KeysTable = InitializeKeysTable(KEYS_TABLE_SIZE);
     HashTable WordsTable = InitializeWordsTable(WORDS_TABLE_SIZE);
@@ -204,8 +221,6 @@ int main(int argc, char* argv[])
     printf("Loading Time: %f s\n\n", time_spent);
 
     PrintHashKeysTable(KeysTable);  //Printing keys to users know them
-
-    //PrintHashWordsTable(WordsTable);
 
     //Pogram menu
     printf("** Escreva a sua mensagem **\n");
@@ -243,8 +258,14 @@ int main(int argc, char* argv[])
                 //Check ifthe word does not exists, 
                 //user will type the word and it will be insert in the current message and the dictionary updated
                 if(P == NULL)
-                    InsertWordToMessageAndUpdateDict(phrase, fp, argv[1]);
-
+                {
+                    wchar_t wordToInsert[BUFFER_LENGTH];
+                    printf("Não existem mais sugestões; introduza a palavra do teclado\n");
+                    scanf("%ls", wordToInsert);
+                    
+                    wchar_t *inserted = InsertWordInHashAndPhrase(wordToInsert, phrase, WordsTable, KeysTable);
+                    CopyDictionaryAndUpdated(argv[1], "dict/output.txt", inserted);
+                }
                 else
                 {
                     printf("Sugestão: %ls, aceita(s/n)? ", P->Element);
@@ -253,8 +274,8 @@ int main(int argc, char* argv[])
                     //If the user accepts the suggestion, the word is inserted to the message
                     if('s' == c)
                     {
-                        wcscat(phrase, L" ");
                         wcscat(phrase, P->Element);
+                        wcscat(phrase, L" ");
                     }
 
                     //If the user dont accept it, suggest the next one until he accepts one or insert if dont have more words to suggest
@@ -266,7 +287,12 @@ int main(int argc, char* argv[])
                             printf("Sugestão: %ls, aceita(s/n)? ", P->Element);
                             scanf(" %c", &c);
                         }
-                        InsertWordToMessageAndUpdateDict(phrase, fp, argv[1]);
+                        wchar_t wordToInsert[BUFFER_LENGTH];
+                        printf("Não existem mais sugestões; introduza a palavra do teclado\n");
+                        scanf("%ls", wordToInsert);
+
+                        wchar_t *inserted = InsertWordInHashAndPhrase(wordToInsert, phrase, WordsTable, KeysTable);
+                        CopyDictionaryAndUpdated(argv[1], "dict/output.txt", inserted);
                     } 
                 }
                 break;
