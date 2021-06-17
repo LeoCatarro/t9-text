@@ -34,7 +34,7 @@
 FILE *OpenDictionary(char *fileName, char* wayToOpen)
 {
     FILE *fp;
-    char filePath[BUFFER_LENGTH] = "dictionaries/";
+    char filePath[BUFFER_LENGTH] = "dict/";
     strcat(filePath, fileName);
 
     fp = fopen(filePath, wayToOpen);
@@ -57,9 +57,8 @@ void UpdateDictionary(wchar_t *word, FILE *fp, char *fileName)
     FILE *fp_updated;
 
     fp = OpenDictionary(fileName, "r");
-    char filePath[BUFFER_LENGTH] = "dictionaries/updated-";
-    strcat(filePath, fileName);
-    printf("%s\n", filePath);
+    /*char filePath[BUFFER_LENGTH] = "dictionaries/";
+    printf("%s\n", filePath);*/
     fp_updated = OpenDictionary("output.txt", "a+");
 
     //Copy all lines to output file if the file is empty
@@ -74,10 +73,10 @@ void UpdateDictionary(wchar_t *word, FILE *fp, char *fileName)
     //Write the new word in the file
     fputws(L"\n",fp_updated);
     fputws(word, fp_updated);
-
-    //Close the file
-    CloseDictionary(fp_updated);
+    CloseDictionary(fp_updated);    //Close the file
+    return;   
 }
+
 
 
 //Processes the file readed word, converting it to lowercase, and "remove" '-' or '\''
@@ -136,7 +135,7 @@ void ProcessData(FILE *fp, HashTable KeysTable, HashTable WordsTable)
             InsertWordAccordingFrequency(tmpWord, freq, res, WordsTable);
         }
 
-        //Repeat the process to read the last line of the file
+        //Process the last line of the file
         long freq = wcstol(wordFreq, NULL, 10);
         tmpWord = (wchar_t*)malloc(sizeof(wchar_t*)*wcslen(buffer));
         tmpWord = wcscpy(tmpWord, buffer);
@@ -159,8 +158,7 @@ void ProcessData(FILE *fp, HashTable KeysTable, HashTable WordsTable)
             InsertWord(tmpWord, res, WordsTable);
         }
 
-        //Repeat again the read process to read the last word in the file
-        fwscanf(fp,L"%ls", buffer);
+        //Process the last line of the file
         tmpWord = (wchar_t*)malloc(sizeof(wchar_t*)*wcslen(buffer));
         tmpWord = wcscpy(tmpWord, buffer);
         cleanWord = CleanWordProcess(tmpWord);
@@ -187,7 +185,6 @@ void InsertWordToMessageAndUpdateDict(wchar_t *phrase, FILE *fp, char* fileName)
 
 int main(int argc, char* argv[])
 {  
-   
     FILE *fp;
     int res;
     wchar_t phrase[BUFFER_LENGTH];  //Array to save the accepted suggested words
