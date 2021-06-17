@@ -1,9 +1,6 @@
-olá
-ola
-Leonardo
-test
-test2
-test3
-test3
-test4
-test5
+word,count
+olá,500
+ola,100
+olà,200
+Leonardo,1
+test1,0

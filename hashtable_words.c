@@ -149,7 +149,6 @@ void InsertWordAccordingFrequency(wchar_t * Key, long wordFreq, long wordInInt, 
 
     //Key is not found
     if( Pos == NULL ){  
-        printf("KEY NOT FOUND\n");
         NewCell = malloc( sizeof( struct ListNode ) );
         NewCell->Element = (wchar_t*)malloc(sizeof(wchar_t*)*wcslen(Key));
 
@@ -171,7 +170,6 @@ void InsertWordAccordingFrequency(wchar_t * Key, long wordFreq, long wordInInt, 
     else
     {   
         //If the word is already in the HashTable, we dont want to repeat it
-        printf("KEY FOUND\n");
         return;
     }
 }

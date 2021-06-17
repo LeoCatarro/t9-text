@@ -54,7 +54,7 @@ void CloseDictionary(FILE *fp)
 void UpdateDictionary(char* source, char* destination, wchar_t* word)
 {
     // declaring file pointers and local variables
-    char buf[100];
+    char buff[100];
     FILE *fp1, *fp2;
  
     // opening files
@@ -68,15 +68,31 @@ void UpdateDictionary(char* source, char* destination, wchar_t* word)
 
     if (0 == size) {
         while (!feof(fp1)) {
-            fgets(buf, sizeof(buf), fp1);
-            fprintf(fp2, "%s", buf);
+            fgets(buff, sizeof(buff), fp1);
+            fprintf(fp2, "%s", buff);
         }
     }
 
+    //Check which type of dictionary is it
+    fseek(fp1, 0, SEEK_SET);
+    fscanf(fp1,"%s", buff);
+
+    //Update dictionary with word and frequency==0
+    if(strstr(buff, ",") != 0)
+    {
+        printf("freq\n");
+        fwprintf(fp2, L"\n");
+        fwprintf(fp2, L"%ls,0", word);
+        rewind(fp2);
+    }
+
     //Update dictionary with word passed as argument
-    fwprintf(fp2, L"\n");
-    fwprintf(fp2, L"%ls", word);
-    rewind(fp2);
+    else
+    {
+        fwprintf(fp2, L"\n");
+        fwprintf(fp2, L"%ls", word);
+        rewind(fp2);
+    }
 }
 
 
@@ -215,6 +231,8 @@ int main(int argc, char* argv[])
     printf("Loading Time: %f s\n\n", time_spent);
 
     PrintHashKeysTable(KeysTable);  //Printing keys to users know them
+
+    PrintHashWordsTable(WordsTable);
 
     //Pogram menu
     printf("** Escreva a sua mensagem **\n");
