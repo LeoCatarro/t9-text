@@ -1,4 +1,3 @@
-//  Compile line: gcc -std=c99 -Wall hashtable_words.c hashtable_keys.c MCurtas.c -o MCurtas -lm
 #include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h>

@@ -80,6 +80,10 @@ comprimentos entre 1 e 23 caracteres.
 * english-freq.txt: lista de palavras da lı́ngua Inglesa com frequência de utilização. É
 composta por 333,334 palavras com comprimentos entre 1 e 38 caracteres.
 
+## Como compilar e correr o programa
+* Compile Line: gcc -std=c99 -Wall hashtable_words.c hashtable_keys.c MCurtas.c -o MCurtas -lm
+* Run Line: ./Mcurtas "dictionaryName.txt"
+
 ### Enunciado feito por:
 * Prof. Teresa Gonçalves
 
