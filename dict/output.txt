@@ -3,3 +3,5 @@ olá,500
 ola,100
 olà,200
 Leonardo,1
+olà
+olâ

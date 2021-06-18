@@ -32,7 +32,7 @@
 FILE *OpenDictionary(char *fileName, char* wayToOpen)
 {
     FILE *fp;
-    char filePath[BUFFER_LENGTH] = "dict/";
+    char filePath[BUFFER_LENGTH] = "../dict/";
     strcat(filePath, fileName);
 
     fp = fopen(filePath, wayToOpen);
@@ -338,7 +338,7 @@ int main(int argc, char* argv[])
                     scanf("%ls", wordToInsert);
                     
                     wchar_t *inserted = InsertWordInHashAndPhrase(fp, wordToInsert, phrase, WordsTable, KeysTable);
-                    UpdateDictionary(argv[1], "output.txt", inserted);
+                    UpdateDictionary(argv[1], "../dict/output.txt", inserted);
                 }
                 else
                 {
@@ -366,7 +366,7 @@ int main(int argc, char* argv[])
                         scanf("%ls", wordToInsert);
 
                         wchar_t *inserted = InsertWordInHashAndPhrase(fp, wordToInsert, phrase, WordsTable, KeysTable);
-                        UpdateDictionary(argv[1], "output.txt", inserted);
+                        UpdateDictionary(argv[1], "../dict/output.txt", inserted);
                     } 
                 }
                 break;
