@@ -32,7 +32,7 @@
 FILE *OpenDictionary(char *fileName, char* wayToOpen)
 {
     FILE *fp;
-    char filePath[BUFFER_LENGTH] = "../dict/";
+    char filePath[BUFFER_LENGTH] = "dict/";
     strcat(filePath, fileName);
 
     fp = fopen(filePath, wayToOpen);
