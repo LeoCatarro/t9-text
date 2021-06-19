@@ -35,6 +35,8 @@ FILE *OpenDictionary(char *fileName, char* wayToOpen)
     char filePath[BUFFER_LENGTH] = "../dict/";
     strcat(filePath, fileName);
 
+    printf("%s\n", filePath);
+
     fp = fopen(filePath, wayToOpen);
 
     return fp;
@@ -72,8 +74,7 @@ void UpdateDictionary(char* source, char* destination, wchar_t* word)
     // opening files
     fp1 = OpenDictionary(source, "a+");
     fp2 = OpenDictionary(destination, "a+");
- 
-    
+  
     //Copy all lines to output file if the file is empty
     fseek (fp2, 0, SEEK_END);
     int size = ftell(fp2);
@@ -85,6 +86,9 @@ void UpdateDictionary(char* source, char* destination, wchar_t* word)
         }
     }
 
+    CloseDictionary(fp2);
+    fp2 = OpenDictionary(destination, "a+");
+
     //Check which type of dictionary is it
     fseek(fp1, 0, SEEK_SET);
     fscanf(fp1,"%s", buff);
@@ -92,7 +96,6 @@ void UpdateDictionary(char* source, char* destination, wchar_t* word)
     //Update dictionary with word and frequency==0
     if(strstr(buff, ",") != 0)
     {
-        printf("freq\n");
         fwprintf(fp2, L"\n");
         fwprintf(fp2, L"%ls,0", word);
         rewind(fp2);
@@ -238,11 +241,11 @@ wchar_t *InsertWordInHashAndPhrase(FILE *fp, wchar_t *wordToInsert, wchar_t *phr
     char tmpBuff[BUFFER_LENGTH];
     wchar_t *tmpWord;
     wchar_t *cleanWord;
-    
-    //Append the word to current phrase
+
+    //Insert word to current phrase
     wcscat(phrase, wordToInsert);
     wcscat(phrase, L" ");
-
+    
     //Check which type of dictionary is it
     fseek(fp, 0, SEEK_SET);
     fscanf(fp,"%s", tmpBuff);
@@ -255,7 +258,7 @@ wchar_t *InsertWordInHashAndPhrase(FILE *fp, wchar_t *wordToInsert, wchar_t *phr
         tmpWord = wcscpy(tmpWord, wordToInsert);
         cleanWord = CleanWordProcess(tmpWord);
         unsigned long res = StringToIntAccordingT9Keys(cleanWord, KeysTable);
-        InsertWordAccordingFrequency(wordToInsert, 0, res, WordsTable);
+        InsertWordAccordingFrequency(tmpWord, 0, res, WordsTable);
     }
 
     //Not frequency file
@@ -266,10 +269,11 @@ wchar_t *InsertWordInHashAndPhrase(FILE *fp, wchar_t *wordToInsert, wchar_t *phr
         tmpWord = wcscpy(tmpWord, wordToInsert);
         cleanWord = CleanWordProcess(tmpWord);
         unsigned long res = StringToIntAccordingT9Keys(cleanWord, KeysTable);
-        InsertWord(wordToInsert, res, WordsTable);
+        InsertWord(tmpWord, res, WordsTable);
     }
 
-    return wordToInsert;
+    free(cleanWord);
+    return tmpWord;
 }
 
 
@@ -278,7 +282,7 @@ int main(int argc, char* argv[])
 {  
     FILE *fp;
     int res;
-    wchar_t phrase[BUFFER_LENGTH];  //Array to save the accepted suggested words
+    wchar_t *phrase = (wchar_t*)malloc(sizeof(wchar_t*)*BUFFER_LENGTH);  //Array to save the accepted suggested words
     setlocale(LC_ALL, ""); 
     clock_t begin = clock();
     fp = OpenDictionary(argv[1], "a+");
@@ -333,12 +337,19 @@ int main(int argc, char* argv[])
                 //user will type the word and it will be insert in the current message and the dictionary updated
                 if(P == NULL)
                 {
-                    wchar_t wordToInsert[BUFFER_LENGTH];
+                    //wchar_t *wordToInsert[BUFFER_LENGTH];
+                    wchar_t *wordToInsert = (wchar_t*)malloc(sizeof(wchar_t*)*BUFFER_LENGTH);
                     printf("Não existem mais sugestões; introduza a palavra do teclado\n");
-                    scanf("%ls", wordToInsert);
-                    
-                    wchar_t *inserted = InsertWordInHashAndPhrase(fp, wordToInsert, phrase, WordsTable, KeysTable);
-                    UpdateDictionary(argv[1], "../dict/output.txt", inserted);
+                    scanf(" %ls", wordToInsert);
+
+                     wchar_t *inserted = InsertWordInHashAndPhrase(fp, wordToInsert, phrase, WordsTable, KeysTable);
+                    char cpFileName[BUFFER_LENGTH];
+                    strcpy(cpFileName, argv[1]);
+                    char *updatedFileName;
+                    updatedFileName = strtok(cpFileName, ".");
+                    strcat(updatedFileName, "-updated.txt");
+                    UpdateDictionary(argv[1], updatedFileName, inserted);
+                    //UpdateDictionary(argv[1], "../dict/output.txt", inserted);
                 }
                 else
                 {
@@ -363,10 +374,17 @@ int main(int argc, char* argv[])
                         }
                         wchar_t wordToInsert[BUFFER_LENGTH];
                         printf("Não existem mais sugestões; introduza a palavra do teclado\n");
-                        scanf("%ls", wordToInsert);
+                        scanf(" %ls", wordToInsert);
 
                         wchar_t *inserted = InsertWordInHashAndPhrase(fp, wordToInsert, phrase, WordsTable, KeysTable);
-                        UpdateDictionary(argv[1], "../dict/output.txt", inserted);
+                        char cpFileName[BUFFER_LENGTH];
+                        strcpy(cpFileName, argv[1]);
+                        char *updatedFileName;
+                        updatedFileName = strtok(cpFileName, ".");
+                        strcat(updatedFileName, "-updated.txt");
+                        UpdateDictionary(argv[1], updatedFileName, inserted);
+                        free(inserted);
+                        //UpdateDictionary(argv[1], "../dict/output.txt", inserted);
                     } 
                 }
                 break;
